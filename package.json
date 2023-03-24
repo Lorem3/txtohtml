@@ -1,0 +1,15 @@
+{
+  "name": "txtohtml",
+  "version": "1.0.0",
+  "description": "安装  terser typescript  ``` npm i terser -g",
+  "main": "genhtml.js",
+  "scripts": {
+    "build": "node_modules/typescript/bin/tsc && node genhtml.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "terser": "^5.16.6",
+    "typescript": "^5.0.2"
+  }
+}

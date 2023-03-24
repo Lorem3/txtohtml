@@ -1,0 +1,108 @@
+.text-input,
+fieldset {
+    margin-bottom: 1.5em
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+    padding-bottom: 4em
+}
+
+body {
+    font-family: sans-serif;
+    line-height: 1.5em;
+    max-width: 40em;
+    padding: 0 2%;
+    margin: auto
+}
+
+.text-input {
+    width: 96%;
+    display: block;
+    padding: .5em 1%;
+    font-size: 1em
+}
+
+.h10 {
+    height: 10em
+}
+.h20 {
+    height: 20em
+}
+.h30 {
+    height: 30em
+}
+
+dt {
+    font-weight: 700
+}
+
+.important {
+    color: red
+}
+
+.footer {
+    text-align: right
+}
+
+.centered {
+    text-align: center
+}
+
+.nope {
+    display: none
+}
+
+.ad-container {
+    float: left;
+    min-width: 33%
+}
+
+.btn{
+    height: 2.5em;
+    font-size: 1em;
+}
+
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /* Loading 动画 */
+  .loader {
+    border: 16px solid #f3f3f3;
+    border-top: 16px solid #3498db;
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+  }
+  
+  /* Loading 动画的动画效果 */
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  /* 关闭按钮 */
+  .close-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 30px;
+    color: #fff;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+  }
+  
