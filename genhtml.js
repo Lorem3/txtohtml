@@ -6,6 +6,10 @@ const minifyConfig = {
   compress: {
     drop_console: true,
     pure_funcs: ["console.log"],
+    global_defs:{
+      "_CURRENT_":(new Date).toISOString()
+  }
+    
   },
   format: {
     max_line_len: 350,
@@ -39,6 +43,8 @@ const minifyConfig = {
       var html2 = tmp.replace("__JS__", js);
 
       fs.writeFileSync(`./${htmldis}/${jsname}.html`, html2);
+    }else if(filename.length > '5' && filename.substring(filename.length - 5,filename.length) == '.html'){
+      fs.cpSync("./html/" + filename,'./htmldis/'+filename)
     }
   });
 })();
