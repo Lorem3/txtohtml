@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "html-minifier-terser": "^7.1.0",
     "terser": "^5.16.6",
     "typescript": "^5.0.2"
   }
