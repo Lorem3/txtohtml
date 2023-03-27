@@ -23,7 +23,7 @@ const minifyConfig = {
 };
 
 (async function () {
-    const htmldis = 'htmldis'
+    const htmldis = 'dis/html'
   fs.rmSync(htmldis, { recursive: true, force: true });
   fs.mkdirSync(htmldis )
    
@@ -47,7 +47,7 @@ const minifyConfig = {
       var html2 = tmp.replace("__JS__", js);
       fs.writeFileSync(`./${htmldis}/${jsname}.html`, html2);
     }else if(filename.length > '5' && filename.substring(filename.length - 5,filename.length) == '.html'){
-      fs.cpSync("./html/" + filename,'./htmldis/'+filename)
+      fs.cpSync("./html/" + filename,'./dis/html/'+filename)
     }
   });
 })();
