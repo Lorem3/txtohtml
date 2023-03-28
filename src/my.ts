@@ -86,7 +86,8 @@
 							const element = data.list[index];
 
 							const newItem = document.createElement('li');
-							newItem.innerHTML = ` <a href = "/${element.url}"> ${element.title || (element.url)}</a>`
+							newItem.innerHTML = `
+							 <a class='post' href = "/${element.url}">  ${element.title || (element.url)} &nbsp; &nbsp; &nbsp; &nbsp; <text class=createtime>${new Date(element.create * 1000).toLocaleString()}</text> <br> ${element.desc } </a>`
 							ul?.append(newItem)
 						}
 					
