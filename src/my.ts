@@ -86,9 +86,16 @@
 							const element = data.list[index];
 
 							const newItem = document.createElement('li');
-							newItem.innerHTML = `
+							if(element.flag == 1){
+								newItem.innerHTML = `
+								 <a class='post disable'  > ${element.title || (element.url)} &nbsp; &nbsp; &nbsp; &nbsp; <text class=createtime>${new Date(element.create * 1000).toLocaleString()}</text> <br> ${element.desc } </a>`
+							   ul?.append(newItem)
+							}else{
+								newItem.innerHTML = `
 							 <a class='post' href = "/${element.url}">  ${element.title || (element.url)} &nbsp; &nbsp; &nbsp; &nbsp; <text class=createtime>${new Date(element.create * 1000).toLocaleString()}</text> <br> ${element.desc } </a>`
 							ul?.append(newItem)
+							}
+							
 						}
 					
 

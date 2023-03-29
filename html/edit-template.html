@@ -12,7 +12,7 @@
 
 	<meta property="og:url" content="https://txto.eu.org" />
 	<meta property="og:title" content="Txto - Fast web pages for everybody" />
-	<meta property="og:image" content="//cdn.jsdelivr.net/npm/txto@1.0.8/txto_196.png" />
+	<meta property="og:image" content="//cdn.jsdelivr.net/npm/txto@1.0.9/txto_196.png" />
 	<meta property="og:site_name" content="Txto" />
 	<meta property="og:description"
 		content="Txto is a free service that lets you create the fastest, simplest, most shareable web pages on the internet using any phone, tablet, or computer you have." />
@@ -26,25 +26,30 @@
 
 	<title>Txto - Fast web pages for everybody</title>
 
-	<link rel="shortcut icon" href="//cdn.jsdelivr.net/npm/txto@1.0.8/txto_16.png" />
-	<link rel="apple-touch-icon" sizes="57x57" href="//cdn.jsdelivr.net/npm/txto@1.0.8/txto_57.png" />
-	<link rel="apple-touch-icon" sizes="114x114" href="//cdn.jsdelivr.net/npm/txto@1.0.8/txto_144.png" />
-	<link rel="apple-touch-icon" sizes="72x72" href="//cdn.jsdelivr.net/npm/txto@1.0.8/txto_72.png" />
-	<link rel="apple-touch-icon" sizes="144x144" href="//cdn.jsdelivr.net/npm/txto@1.0.8/txto_144.png" />
-	<link rel="apple-touch-icon" sizes="60x60" href="//cdn.jsdelivr.net/npm/txto@1.0.8/txto_60.png" />
-	<link rel="apple-touch-icon" sizes="120x120" href="//cdn.jsdelivr.net/npm/txto@1.0.8/txto_120.png" />
-	<link rel="apple-touch-icon" sizes="76x76" href="//cdn.jsdelivr.net/npm/txto@1.0.8/txto_76.png" />
-	<link rel="apple-touch-icon" sizes="152x152" href="//cdn.jsdelivr.net/npm/txto@1.0.8/txto_152.png" />
-	<link rel="icon" type="image/png" href="//cdn.jsdelivr.net/npm/txto@1.0.8/txto_196.png" sizes="196x196" />
-	<link rel="icon" type="image/png" href="//cdn.jsdelivr.net/npm/txto@1.0.8/txto_160.png" sizes="160x160" />
-	<link rel="icon" type="image/png" href="//cdn.jsdelivr.net/npm/txto@1.0.8/txto_96.png" sizes="96x96" />
-	<link rel="icon" type="image/png" href="//cdn.jsdelivr.net/npm/txto@1.0.8/txto_16.png" sizes="16x16" />
-	<link rel="icon" type="image/png" href="//cdn.jsdelivr.net/npm/txto@1.0.8/txto_32.png" sizes="32x32" />
+	<link rel="shortcut icon" href="//cdn.jsdelivr.net/npm/txto@1.0.9/txto_16.png" />
+	<link rel="apple-touch-icon" sizes="57x57" href="//cdn.jsdelivr.net/npm/txto@1.0.9/txto_57.png" />
+	<link rel="apple-touch-icon" sizes="114x114" href="//cdn.jsdelivr.net/npm/txto@1.0.9/txto_144.png" />
+	<link rel="apple-touch-icon" sizes="72x72" href="//cdn.jsdelivr.net/npm/txto@1.0.9/txto_72.png" />
+	<link rel="apple-touch-icon" sizes="144x144" href="//cdn.jsdelivr.net/npm/txto@1.0.9/txto_144.png" />
+	<link rel="apple-touch-icon" sizes="60x60" href="//cdn.jsdelivr.net/npm/txto@1.0.9/txto_60.png" />
+	<link rel="apple-touch-icon" sizes="120x120" href="//cdn.jsdelivr.net/npm/txto@1.0.9/txto_120.png" />
+	<link rel="apple-touch-icon" sizes="76x76" href="//cdn.jsdelivr.net/npm/txto@1.0.9/txto_76.png" />
+	<link rel="apple-touch-icon" sizes="152x152" href="//cdn.jsdelivr.net/npm/txto@1.0.9/txto_152.png" />
+	<link rel="icon" type="image/png" href="//cdn.jsdelivr.net/npm/txto@1.0.9/txto_196.png" sizes="196x196" />
+	<link rel="icon" type="image/png" href="//cdn.jsdelivr.net/npm/txto@1.0.9/txto_160.png" sizes="160x160" />
+	<link rel="icon" type="image/png" href="//cdn.jsdelivr.net/npm/txto@1.0.9/txto_96.png" sizes="96x96" />
+	<link rel="icon" type="image/png" href="//cdn.jsdelivr.net/npm/txto@1.0.9/txto_16.png" sizes="16x16" />
+	<link rel="icon" type="image/png" href="//cdn.jsdelivr.net/npm/txto@1.0.9/txto_32.png" sizes="32x32" />
 	<meta name="msapplication-TileColor" content="#9f00a7" />
-	<meta name="msapplication-TileImage" content="//cdn.jsdelivr.net/npm/txto@1.0.8/txto_144.png" />
+	<meta name="msapplication-TileImage" content="//cdn.jsdelivr.net/npm/txto@1.0.9/txto_144.png" />
 	<meta name="msapplication-config" content="/browserconfig.xml" />
 
-	<link href="//cdn.jsdelivr.net/npm/txto@1.0.8/txto.min.css" rel="stylesheet" type="text/css" />
+	<link href="//cdn.jsdelivr.net/npm/txto@1.0.9/txto.min.css" rel="stylesheet" type="text/css" />
+	<style>
+		.red{
+			color: #e00;
+		}
+	</style>
 </head>
 
 <!-- Google tag (gtag.js) -->
@@ -95,9 +100,9 @@
 			By continuing, you agree to the <a href="/terms">terms of service.</a>
 		</p>
 	
-		<input class="btn" type="button"   id="submit" name="submit" value="Save and done" />
+		<button type="button"   id="submit" name="submit" value="Save and done">Save</button>
 		or
-		<input class="btn" type="button"   id="delete" name="delete" value="Delete this post" />
+		<button class="red" type="button"   id="delete" name="delete" value="Delete this post">Delete this post</button>
 	</form>
    </div>
 
