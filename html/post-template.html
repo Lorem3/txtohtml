@@ -71,7 +71,9 @@
 
 	<h2>Create a Txto</h2>
 	<form id="create-a-Txto" method="post" action="/">
-		<label for="content-input">Content (required)</label>
+		<label for="content-input" id="contentdesc">Content (required)</label>
+		<br>
+		<br>
 		<textarea class="text-input h20" id="content-input" name="content"></textarea>
 		<input type="hidden" name="action" value="createpost" />
 		
@@ -82,43 +84,7 @@
 			<label for="custom-edit-code" >Custom edit code </label>
 			<input class="text-input" type="text" id="custom-edit-code" name="custom_edit_code" autocapitalize="none" value="">
 		</fieldset>
-
-		<fieldset id="meta-field" style="display: none;">
-			<legend>Metadata (Twitter Card and more)</legend>
-			<label for="title-input">Page title (appears in browser tab and search results)</label>
-			<input class="text-input" type="text" id="title-input" name="title" value="">
-			<label for="author-input">Author (Twitter handle recommended)</label>
-			<input class="text-input" type="text" id="author-input" name="author" value="">
-			<label for="description-input">Description (under 200 chars)</label>
-			<textarea class="text-input" type="text" id="description-input" name="description"></textarea>
-		</fieldset>
-		<p>
-			By continuing, you agree to the <a href="/terms">terms of service.</a>
-		</p>
-
-		<div><label>remove after:</label>
-			<input
-			  type="radio"
-			  id="expireTime1"
-			  name="expire"
-			  class="radio"
-			  value="0"
-			  checked =true/>
-			<label for="expireTime1">Never</label>
-	  
-			<input type="radio" class="radio" id="expireTime2" name="expire" value="7" />
-			<label for="expireTime2">7 days</label>
-			<!-- <input type="radio"  class="radio" id="expireTime5" name="expire" value="15" />
-			<label for="expireTime5">15 days</label> -->
-	  
-			<input type="radio"  class="radio" id="expireTime3" name="expire" value="30" />
-			<label for="expireTime3">30 days</label>
-
-			<input type="radio"  class="radio" id="expireTime4" name="expire" value="180" />
-			<label for="expireTime4">180 days</label>
-		  </div>
-		<p></p>
-		<button  type="button"   id="showmore" name="submit" value="Show more options" > Show more options </button>
+ 
 		<p>
 		<button type="button"   id="submit" name="submit" value="Create Post" >Create Post</button>
 		
@@ -132,7 +98,6 @@
 		 if you logined,your post url will be like  exampl.com/AcountName/posturl
 	   </p>
 		
-	   
    </div>
  
 
