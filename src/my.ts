@@ -1,4 +1,4 @@
-(function a(){
+var PageFunc = (function a(){
 	(function(){
 		var t =  decodeURIComponent(getCookie('accname') )  
 		if(t){
@@ -57,7 +57,47 @@
 	function showMsg(msg :string){
 		alert(msg)
 	}
-	
+
+	function deletepage(pageid:string){
+		if (!confirm("do you want to delete this post ?")) {
+			return
+		}
+		showLoading(true)
+		var oriEditCode = ""
+
+		var body = JSON.stringify({
+			pageId:pageid,
+			editCode: oriEditCode 
+		})
+
+		const request = new XMLHttpRequest();
+		request.open("POST", "/delete");
+		request.setRequestHeader("Content-type", "application/json");
+		request.responseType = "json";
+
+		request.onload = function () {
+			if (request.status !== 200) {
+				alert("Error fetching data.");
+			} else {
+				var data = request.response;
+				if (data.code == 0) {
+					setTimeout(() => {
+						document.getElementById(pageid)!.remove()
+						
+					}, 100);
+				} else {
+					showMsg(data.err);
+				}
+			}
+			return;
+		};
+
+		request.onloadend = function () {
+			showLoading(false);
+		};
+		request.send(body);
+	}
+
 	var page = 0
 	function getList(){
 		showLoading(true)
@@ -86,15 +126,19 @@
 							const element = data.list[index];
 
 							const newItem = document.createElement('li');
-							if(element.flag == 1){
-								newItem.innerHTML = `
-								 <a class='post disable'  > ${element.title || (element.url)} &nbsp; &nbsp; &nbsp; &nbsp; <text class=createtime>${new Date(element.create * 1000).toLocaleString()}</text> <br> ${element.desc } </a>`
-							   ul?.append(newItem)
-							}else{
-								newItem.innerHTML = `
-							 <a class='post' href = "/${element.url}">  ${element.title || (element.url)} &nbsp; &nbsp; &nbsp; &nbsp; <text class=createtime>${new Date(element.create * 1000).toLocaleString()}</text> <br> ${element.desc } </a>`
+							newItem.id = element.pageid
+							newItem.innerHTML = ` 
+							 <a class='post' href = "/${element.url}"> 
+							 ${element.title || (element.url)} &nbsp;   
+							 <text class=createtime>${new Date(element.create * 1000).toLocaleString()} 
+							 	<a class="delete" href="#" onclick=PageFunc.deletepage("${element.pageid}")> Delete</a>
+								 &nbsp; 
+								<a class="edit" href="/${element.url}/edit" )> Edit</a>
+							 </text>  
+							 <br> <br> 
+							 <a class='post' href = "/${element.url}">   ${element.desc }</a></a>`
 							ul?.append(newItem)
-							}
+							
 							
 						}
 					
@@ -151,7 +195,7 @@
 
 	setLogoutActioon()
 	
-	
+	return {deletepage}
 	
   })();
 
