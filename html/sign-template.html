@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<!-- new server -->
+	<meta charset="utf-8" />
+
+	<link href="//cdn.jsdelivr.net/npm/txto@1.0.9/txto.min.css" rel="stylesheet" type="text/css" />
+	<style lang="">
+		#currentdomain {
+			font-size: 1rem;
+			font-weight: lighter;
+			float: right;
+			display: inline;
+		}
+	</style>
+</head>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZRPJZGBBVY"></script>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag("js", new Date());
+
+	gtag("config", "G-ZRPJZGBBVY");
+</script>
+
+<body>
+	<h2>
+		<a href="/">Txto</a>
+		<div style="text-align: right" id="currentdomain"></div>
+	</h2>
+	<div id="beforecreate">
+		<p>Fast web pages for everybody.</p>
+
+		<h2>Create a Txto</h2>
+		<form id="create-a-Txto" method="post" action="/">
+			<fieldset id="adv-field">
+				<legend>公钥</legend>
+
+				<input class="text-input" type="text" id="pubkey" name="custom_url" value="" autocapitalize="none" />
+				<label for="custom-edit-code">时间 天</label>
+				<input class="text-input" type="number" id="day" name="custom_edit_code" autocapitalize="none"
+					value="1" />
+			</fieldset>
+ 
+			
+			<button type="button" id="submit" name="submit" value="Create Post">
+				确认
+			</button>
+		</form>
+		<br>
+		<br>
+		
+
+		<div id="signresult">
+		</div>
+	</div>
+
+	<div class="overlay" style="display: none">
+		<div class="loader"></div>
+		<div class="close-btn">&times;</div>
+	</div>
+</body>
+<script>
+	__JS__;
+</script>
+
+</html>
