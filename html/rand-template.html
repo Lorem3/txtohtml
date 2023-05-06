@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+
+
+<head>
+	<!-- new server -->
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+	<link rel="shortcut icon" href="//cdn.jsdelivr.net/npm/txto@1.2.5/txto_16.png" />
+	<link rel="apple-touch-icon" sizes="57x57" href="//cdn.jsdelivr.net/npm/txto@1.2.5/txto_57.png" />
+	<link rel="apple-touch-icon" sizes="114x114" href="//cdn.jsdelivr.net/npm/txto@1.2.5/txto_144.png" />
+	<link rel="apple-touch-icon" sizes="72x72" href="//cdn.jsdelivr.net/npm/txto@1.2.5/txto_72.png" />
+	<link rel="apple-touch-icon" sizes="144x144" href="//cdn.jsdelivr.net/npm/txto@1.2.5/txto_144.png" />
+	<link rel="apple-touch-icon" sizes="60x60" href="//cdn.jsdelivr.net/npm/txto@1.2.5/txto_60.png" />
+	<link rel="apple-touch-icon" sizes="120x120" href="//cdn.jsdelivr.net/npm/txto@1.2.5/txto_120.png" />
+	<link rel="apple-touch-icon" sizes="76x76" href="//cdn.jsdelivr.net/npm/txto@1.2.5/txto_76.png" />
+	<link rel="apple-touch-icon" sizes="152x152" href="//cdn.jsdelivr.net/npm/txto@1.2.5/txto_152.png" />
+	<link rel="icon" type="image/png" href="//cdn.jsdelivr.net/npm/txto@1.2.5/txto_196.png" sizes="196x196" />
+	<link rel="icon" type="image/png" href="//cdn.jsdelivr.net/npm/txto@1.2.5/txto_160.png" sizes="160x160" />
+	<link rel="icon" type="image/png" href="//cdn.jsdelivr.net/npm/txto@1.2.5/txto_96.png" sizes="96x96" />
+	<link rel="icon" type="image/png" href="//cdn.jsdelivr.net/npm/txto@1.2.5/txto_16.png" sizes="16x16" />
+	<link rel="icon" type="image/png" href="//cdn.jsdelivr.net/npm/txto@1.2.5/txto_32.png" sizes="32x32" />
+	<meta name="msapplication-TileColor" content="#9f00a7" />
+	<meta name="msapplication-TileImage" content="//cdn.jsdelivr.net/npm/txto@1.2.5/txto_144.png" />
+	<meta name="msapplication-config" content="/browserconfig.xml" />
+
+	<link href="//cdn.jsdelivr.net/npm/txto@1.2.5/txto.min.css" rel="stylesheet" type="text/css" />
+
+	<style>
+		ul{
+			padding: 0;
+		}
+		li {
+			padding-top: 1.5em;
+			font-weight: lighter;
+		}
+		li > a {
+			font-size: 15px;
+		}
+
+		.right {
+			float: right;
+		}
+
+		.logout {
+			font-size: 15px;
+			font-weight: 100;
+		}
+
+		.post{
+			color: #808080;
+			text-decoration: none;
+			/* margin-bottom: 20px; */
+			
+		}
+		.post:hover{
+			color: #000;
+			
+		}
+
+		#showmore{
+			font-size: 13pt;
+			color: #333;
+		}
+		#showmore:hover{
+			font-size: 13pt;
+			color: #f12829;
+		}
+
+		.createtime{
+			float: right;
+		}
+		.disable{
+			text-decoration: line-through;
+			text-decoration-color: #808080;
+		}
+
+		.edit,
+		.delete{
+			text-decoration: none;
+			color: #808080;
+		}
+		.edit:hover,
+		.delete:hover{
+			color: #f00;
+		}
+	</style>
+</head>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZRPJZGBBVY"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-ZRPJZGBBVY');
+</script>
+<body> <div class="maincard">
+
+	<h1><a href="/">Txto</a> </h1>
+	<p style="text-align: right" id="currentdomain"> </p>
+
+	<p>Fast web pages for everybody.</p>
+	<a href="/about">What is Txto?</a> | <a href="/how">How to use Txto</a>
+
+	<h3>posts<h3>
+	<ul id="postlist">
+	</ul>
+ 
+
+	<div class="overlay" style="display: none;">
+		<div class="loader"></div>
+		<div class="close-btn" id="close-btn">&times;</div>
+	</div>
+</div></body>
+<script>
+	__JS__
+</script>
+
+</html>
