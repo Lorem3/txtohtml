@@ -36,7 +36,7 @@
     } else {
       document.getElementById(
         "currentdomain"
-      )!.innerHTML = `<a href="/randpost">public</a> | <a href="/login">login</a>`;
+      )!.innerHTML = `public | <a href="/login">login</a>`;
     }
   })();
 
