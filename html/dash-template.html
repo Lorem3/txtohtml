@@ -59,7 +59,9 @@
 
 
 <body> <div class="maincard">
-	<h2><a href="/">Txto</a>  </h2>
+	<h1><a href="/">Txto</a>  </h1>
+	<hr >
+	<h2>更新Html包</h2>
 	<p>current <text id="currentbuildtime"> </text></p>
  
 	<div class="overlay" style="display: none;">
@@ -77,6 +79,21 @@
 		
 	</form>
 	
+	<hr >
+	<h2>删除</h2>
+		<p class="note">根据url前缀删除，只能是字母和数字</p>
+		<input id="prefix"  ></input>
+		<br>
+		<p>
+		<button class="btn" type="button"   id="delete2" name="submit" value="delete2" >标记删除</button>
+
+	<hr >
+	<h2>清空</h2>
+	<p>
+		物理清空标记为删除的数据
+	</p>
+
+	<button class="btn" type="button"   id="clean" name="submit" value="" >物理删除</button>
  
 
 	<p style="text-align: right"><a href="/">txto</a></p>

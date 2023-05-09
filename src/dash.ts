@@ -12,6 +12,39 @@ declare var _CURRENT_: string;
   }
 
   document.getElementById("submit")!.onclick = submit;
+  document.getElementById("delete2")!.onclick = delete2;
+  document.getElementById("clean")!.onclick = clean;
+
+
+  function sendReq(url: string , body  :any){
+    const request = new XMLHttpRequest();
+
+    request.open("POST", url);
+    request.setRequestHeader(
+      "Content-type",
+      "application/x-www-form-urlencoded"
+    );
+    request.responseType = "json";
+
+    request.onload = function () {
+      if (request.status !== 200) {
+        alert("Error fetching data.");
+      } else {
+        var data = request.response;
+        if (data.code == 0) {
+          alert("succ")
+        } else {
+          alert(data.err);
+        }
+      }
+      return;
+    };
+
+    request.onloadend = function () {
+      showLoading(false);
+    };
+    request.send(body);
+  }
 
   function submit() {
     var fileInput = document.getElementById("file") as HTMLInputElement;
@@ -47,5 +80,19 @@ declare var _CURRENT_: string;
       };
     };
     reader.readAsArrayBuffer(file);
+  }
+
+  function delete2(){
+    var prefix = (document.getElementById("prefix") as HTMLInputElement).value
+    if(!prefix || /^0-9a-zA-z$/.test(prefix)){
+      alert("prefix error")
+      return
+    }
+
+    sendReq("/delete2",JSON.stringify({prefix}))
+  }
+
+  function clean(){
+    sendReq("/clean","")
   }
 })();
