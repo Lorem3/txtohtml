@@ -9,6 +9,7 @@
     while (true) {
       var uuid = crypto.randomUUID()
       let d = await crypto.subtle.digest("SHA-256",te.encode(pre + uuid))  
+      d = await crypto.subtle.digest("SHA-256",d)  
       let ui8 = new Uint8Array(d) ;
       // 计算开头bit0数量
       var Cnt = 0
