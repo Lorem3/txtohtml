@@ -43,7 +43,13 @@ const minifyConfig = {
       var tmp = fs.readFileSync("./html/" + filename).toString();
       tmp = await htmlminify(tmp, htmlconfig);
       var js = fs.readFileSync(`./dis/${jsname}.js`).toString();
-      js = (await minify(js, minifyConfig)).code;
+
+      if(process.argv[2] == 'DEBUG'){
+
+      }else{
+        js = (await minify(js, minifyConfig)).code;
+      }
+      
       var html2 = tmp.replace("__JS__", js);
       fs.writeFileSync(`./${htmldis}/${jsname}.html`, html2);
     }else if(filename.length > '5' && filename.substring(filename.length - 5,filename.length) == '.html'){

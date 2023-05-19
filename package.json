@@ -4,7 +4,8 @@
   "description": "安装  terser typescript  ``` npm i terser -g",
   "main": "genhtml.js",
   "scripts": {
-    "build": "node_modules/typescript/bin/tsc && node genhtml.js && ./pack dis/html"
+    "build": "node_modules/typescript/bin/tsc && node genhtml.js && ./pack dis/html",
+    "debug": "node_modules/typescript/bin/tsc && node genhtml.js DEBUG && ./pack dis/html"
   },
   "author": "",
   "license": "ISC",

@@ -1,6 +1,11 @@
 declare var _CURRENT_: string;
 (function a() {
-  document.getElementById("currentbuildtime")!.innerText = _CURRENT_;
+  try {
+    document.getElementById("currentbuildtime")!.innerText = _CURRENT_;  
+  } catch (error) {
+    
+  }
+  
   function closeLoading() {
     showLoading(false);
   }
