@@ -6,8 +6,11 @@
 
     var pre = time + content;
     var te = new TextEncoder
+
+    var rnd = new Uint8Array(32)
     while (true) {
-      var uuid = crypto.randomUUID()
+      await crypto.getRandomValues(rnd)
+      var uuid = btoa(rnd as unknown as  string).substring(0,32)
       let d = await crypto.subtle.digest("SHA-256",te.encode(pre + uuid))  
       d = await crypto.subtle.digest("SHA-256",d)  
       let ui8 = new Uint8Array(d) ;
