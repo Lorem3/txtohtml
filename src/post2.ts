@@ -1,3 +1,5 @@
+/// 通过token上传
+
 (function a() {
   var posttoken = "";
   var initcontent = "";
