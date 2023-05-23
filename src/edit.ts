@@ -1,4 +1,79 @@
 (async function () {
+	async function genSign(content :string){
+		var MINZER0 = 15
+		var t1 = Date.now()
+		var time = ('' + t1).substring(0,10)
+	
+		var pre = time + content;
+		var te = new TextEncoder
+	
+		var rnd = new Uint8Array(32)
+		while (true) {
+		  await crypto.getRandomValues(rnd)
+		  var uuid = btoa(rnd as unknown as  string).substring(0,32)
+		  let d = await crypto.subtle.digest("SHA-256",te.encode(pre + uuid))  
+		  d = await crypto.subtle.digest("SHA-256",d)  
+		  let ui8 = new Uint8Array(d) ;
+		  // 计算开头bit0数量
+		  var Cnt = 0
+		  for (let index = 0; index < 32; index++) {
+			const n = ui8[index];
+			if ((n & 128) == 0){
+			  Cnt += 1
+			}else{
+			  break
+			}
+			if ((n & 64) == 0){
+			  Cnt += 1
+			}else{
+			  break
+			}
+			if ((n & 32) == 0){
+			  Cnt += 1
+			}else{
+			  break
+			}
+			if ((n & 16) == 0){
+			  Cnt += 1
+			}else{
+			  break
+			}
+			if ((n & 8) == 0){
+			  Cnt += 1
+			}else{
+			  break
+			}
+			if ((n & 4) == 0){
+			  Cnt += 1
+			}else{
+			  break
+			}
+	
+			if ((n & 2) == 0){
+			  Cnt += 1
+			}else{
+			  break
+			}
+	
+			if ((n & 1) == 0){
+			  Cnt += 1
+			}else{
+			  break
+			}
+	
+			if(Cnt>= MINZER0){
+			  break
+			}
+		  }
+	
+		  if(Cnt >= MINZER0){
+			console.log(MINZER0,time + uuid, Date.now() -t1,)
+	
+			return {time,sign:uuid}
+			
+		  } 
+		}
+	  }
 	function closeLoading() {
 		showLoading(false);
 	}
@@ -36,11 +111,11 @@
 	}
 
 	var btn = document.getElementById("submit")!;
-	btn.onclick = submit;
+	btn.onclick = editpost;
 
 	var btnMore = document.getElementById("delete")!;
 	btnMore.onclick = deletepost;
-	function deletepost() {
+	async function deletepost() {
 		
 		if (!confirm("do you want to delete this post ?")) {
 			return
@@ -48,9 +123,13 @@
 		showLoading(true)
 		var oriEditCode = getValueById("ori-edit-code");
 
+		var signObj = await genSign( 'delete' + pageid );
+
 		var body = JSON.stringify({
 			pageId:pageid,
-			editCode: oriEditCode 
+			editCode: oriEditCode ,
+			time:signObj.time,
+			sign:signObj.sign
 		})
 
 		const request = new XMLHttpRequest();
@@ -89,7 +168,7 @@
 		return (document.getElementById(id) as HTMLInputElement).value;
 	}
 
-	function submit() {
+	async function editpost() {
 		
 
 		var content = getValueById("content-input");
@@ -111,6 +190,16 @@
 		var author = getValueById("author-input");
 		var desc = getValueById("description-input");
 
+		var signObj = await genSign(pageid + oriEditCode );
+
+		var body = JSON.stringify({
+			pageId:pageid,
+			editCode: oriEditCode ,
+			time:signObj.time,
+			sign:signObj.sign
+		})
+
+
 		var bodyobj = {
 			content: content,
 			oriEditCode: oriEditCode,
@@ -120,6 +209,8 @@
 			desc: desc,
 			pageId: pageid,
 			private: 0,
+			...signObj
+
 		};
 
 		var body = JSON.stringify(bodyobj);
