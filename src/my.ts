@@ -1,4 +1,80 @@
 var PageFunc = (function a(){
+	var PAGE = 0
+	async function genSign(content: string) {
+		console.log("content",content)
+		var MINZER0 = 15;
+		var t1 = Date.now();
+		var time = ("" + t1).substring(0, 10);
+	
+		var pre = time + content;
+		var te = new TextEncoder();
+	
+		var rnd = new Uint8Array(32);
+		while (true) {
+		  await crypto.getRandomValues(rnd);
+		  var uuid = btoa(rnd as unknown as string).substring(0, 32);
+		  let d = await crypto.subtle.digest("SHA-256", te.encode(pre + uuid));
+		  d = await crypto.subtle.digest("SHA-256", d);
+		  let ui8 = new Uint8Array(d);
+		  // 计算开头bit0数量
+		  var Cnt = 0;
+		  for (let index = 0; index < 32; index++) {
+			const n = ui8[index];
+			if ((n & 128) == 0) {
+			  Cnt += 1;
+			} else {
+			  break;
+			}
+			if ((n & 64) == 0) {
+			  Cnt += 1;
+			} else {
+			  break;
+			}
+			if ((n & 32) == 0) {
+			  Cnt += 1;
+			} else {
+			  break;
+			}
+			if ((n & 16) == 0) {
+			  Cnt += 1;
+			} else {
+			  break;
+			}
+			if ((n & 8) == 0) {
+			  Cnt += 1;
+			} else {
+			  break;
+			}
+			if ((n & 4) == 0) {
+			  Cnt += 1;
+			} else {
+			  break;
+			}
+	
+			if ((n & 2) == 0) {
+			  Cnt += 1;
+			} else {
+			  break;
+			}
+	
+			if ((n & 1) == 0) {
+			  Cnt += 1;
+			} else {
+			  break;
+			}
+	
+			if (Cnt >= MINZER0) {
+			  break;
+			}
+		  }
+	
+		  if (Cnt >= MINZER0) {
+			console.log(MINZER0,pre + uuid, Date.now() - t1);
+	
+			return { time, sign: uuid };
+		  }
+		}
+	  }
 	(function(){
 		var t =  decodeURIComponent(getCookie('accname') )  
 		if(t){
@@ -58,16 +134,19 @@ var PageFunc = (function a(){
 		alert(msg)
 	}
 
-	function deletepage(pageid:string){
+	async function deletepage(pageid:string){
 		if (!confirm("do you want to delete this post ?")) {
 			return
 		}
 		showLoading(true)
 		var oriEditCode = ""
 
+		let sign = await genSign("delete"+pageid)
+
 		var body = JSON.stringify({
 			pageId:pageid,
-			editCode: oriEditCode 
+			editCode: oriEditCode ,
+			...sign
 		})
 
 		const request = new XMLHttpRequest();
@@ -98,12 +177,16 @@ var PageFunc = (function a(){
 		request.send(body);
 	}
 
-	var page = 0
-	function getList(){
+	
+	async function getList(){
 		showLoading(true)
 
+		let sign = await genSign("list" + PAGE)
+		console.log('list' + PAGE)
+		console.log(sign.sign,sign.time)
 		var bodyObj = {
-			page:page
+			PAGE:PAGE,
+			...sign
 		}
 		var body = JSON.stringify(bodyObj)
 		
@@ -120,7 +203,7 @@ var PageFunc = (function a(){
 				var data = request.response
 				if(data.code == 0){
 					if(data.list && data.list.length > 0){
-						page ++;
+						PAGE ++;
 						var ul =  document.getElementById('postlist')
 						for (let index = 0; index < data.list.length; index++) {
 							const element = data.list[index];
