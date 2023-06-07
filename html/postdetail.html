@@ -21,6 +21,21 @@
 		img{
 			max-width: 100%
 		}
+		.time{
+            color: #e0e0e0;
+            float: right;
+			font-size: 0.9em;
+        }
+
+        hr{
+            border: none;
+            margin:2em 0 5px 0;
+            border-bottom: dashed 1px #ccc;
+        }
+
+        .gotomain{
+            float: right;
+        }
 	</style>
 </head>
 
@@ -36,6 +51,14 @@
 
 <body> <div class="maincard">
 		__BODY__
-		<p style="text-align: right"><a href="/">txto</a></p>
+
+
+		<!-- time  -->
+		<hr>
+        <time class="time" datetime="__CREATE_TIME__" >create: __CREATE_TIME_SHORT__</time>
+        <br>
+        <time class="time" datetime="__UPDATE_TIME__">update: __UPDATE_TIME_SHORT__</time>
+        <br>
+        <a class="gotomain" href="/">txto</a> 
 </div></body>
 </html>

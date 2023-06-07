@@ -19,7 +19,11 @@ declare var _CURRENT_: string;
   document.getElementById("submit")!.onclick = submit;
   document.getElementById("delete2")!.onclick = delete2;
   document.getElementById("clean")!.onclick = clean;
+  document.getElementById("clearCache")!.onclick = clean;
 
+  async function clearCache(){
+    sendReq('removeAllCache',{})
+  }
 
   function sendReq(url: string , body  :any){
     const request = new XMLHttpRequest();
