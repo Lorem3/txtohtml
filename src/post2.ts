@@ -88,11 +88,11 @@
     let json = JSON.parse(jsonStr)
     posttoken = json.token
 
-    document.getElementById("contentdesc")!.innerText = json.tip
-    document.getElementById("title")!.innerText = json.title
+    document.getElementById("contentdesc")!.innerText = json.tip || ""
+    document.getElementById("title")!.innerText = json.title || ""
     var txta = document.getElementById("content-input") as HTMLTextAreaElement
-    txta.value = json.content
-    initcontent = json.content
+    txta.value = json.content || ""
+    initcontent = json.content || ""
   })()
 
 
