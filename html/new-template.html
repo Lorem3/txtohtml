@@ -49,6 +49,16 @@
 		float: right;
 		display: inline;
 	}
+
+	#content-input{
+		height: 400px;
+	}
+	#content-input ::placeholder {
+		color: #e3e3e3;
+		opacity: 1;
+		line-height: 1.5;
+		}
+	 
 </style>
 </head>
 
@@ -70,8 +80,29 @@
 
 	<h2>Create a Txto</h2>
 	<form id="create-a-Txto" method="post" action="/">
-		<label for="content-input">Content (required)</label>
-		<textarea class="text-input h20" id="content-input" name="content" placeholder="Markdown syntax supported"></textarea>
+		<label for="content-input">Content (required)</label> <details><summary >Markdown syntax supported
+		</summary>
+		<pre>
+	#Heading 1 = biggest heading
+	##Heading 2 = second biggest heading
+	...
+	Two spaces (space bars) at the end of a line starts a new line.
+	Return twice (leaving an empty line) starts a new paragraph.
+	**bold** = bold font
+	Links: [link to Txto](http://Txto.eu.org) 
+	Images*: ![Monkey selfie](http://i.imgur.com/FXSBf8c.jpg)
+	Bulleted lists:
+	- Bulleted item a
+	- Bulleted item b
+	- Bulleted item c
+	Numbered lists:
+	1. Numbered item 1
+	2. Numbered item 2
+	3. Numbered item 3
+			</pre></details>
+		<textarea class="text-input h20" id="content-input" name="content" 
+placeholder='Markdown syntax supported
+'></textarea>
 		<input type="hidden" name="action" value="createpost" />
 		
 		<fieldset id="adv-field" style="display: none;">
