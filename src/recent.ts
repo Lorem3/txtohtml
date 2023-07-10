@@ -1,6 +1,6 @@
 (function a(){
     async function genSign(content :string){
-		var MINZER0 = 15
+		// var MINZER0 = 15
 		var t1 = Date.now()
 		var time = ('' + t1).substring(0,10)
 	

@@ -2,7 +2,7 @@ var PageFunc = (function a(){
 	var PAGE = 0
 	async function genSign(content: string) {
 		console.log("content",content)
-		var MINZER0 = 15;
+		// var MINZER0 = 15;
 		var t1 = Date.now();
 		var time = ("" + t1).substring(0, 10);
 	

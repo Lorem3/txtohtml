@@ -13,12 +13,13 @@ const minifyConfig = {
     drop_console: true,
     pure_funcs: ["console.log"],
     global_defs:{
-      "_CURRENT_":(new Date).toISOString()
+      "_CURRENT_":(new Date).toISOString(),
+      "MINZER0":parseInt(fs.readFileSync('html/cfg-pow.html').toString())
   }
     
   },
   format: {
-    max_line_len: 350,
+    max_line_len: 150,
   },
 };
 
