@@ -61,13 +61,13 @@
           break
         }
 
-        if(Cnt>= MINZER0){
+        if(Cnt>= MINZER0_Add){
           break
         }
       }
 
-      if(Cnt >= MINZER0){
-        console.log(MINZER0,time + uuid, Date.now() -t1,)
+      if(Cnt >= MINZER0_Add){
+        console.log(MINZER0_Add,time + uuid, Date.now() -t1,)
 
         return {time,sign:uuid}
         

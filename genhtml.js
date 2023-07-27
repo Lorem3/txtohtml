@@ -14,7 +14,9 @@ const minifyConfig = {
     pure_funcs: ["console.log"],
     global_defs:{
       "_CURRENT_":(new Date).toISOString(),
-      "MINZER0":parseInt(fs.readFileSync('html/cfg-pow.html').toString())
+      "MINZER0":parseInt(fs.readFileSync('html/cfg-pow.html').toString()),
+      "MINZER0_Add":parseInt(fs.readFileSync('html/cfg-pow-add.html').toString())
+      
   }
     
   },
