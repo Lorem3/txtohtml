@@ -244,7 +244,6 @@
       "application/x-www-form-urlencoded"
     );
     request.responseType = "json";
-    increaseCount()
     request.onload = function () {
       // if (request.status !== 200) {
       //   alert("Error fetching data.");
