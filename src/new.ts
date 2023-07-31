@@ -148,17 +148,54 @@
     return (document.getElementById(id) as HTMLInputElement).value;
   }
 
-  function submit(){
+  async function submit(){
     var content = getValue("content-input");
     if (!content) {
       showMsg("please input content");
       return;
     }
     showLoading(true);
+    let c = await getCount()
+    if(c > 10){
+      await wait(Math.pow(2,c- 10 ))
+    }
     setTimeout(() => {
        _submit()
     }, 0);
   }
+
+  async function wait(t:number){
+    return new Promise(r=>{
+      setTimeout(() => {
+        r(1);
+      }, t * 1000);
+    })
+  }
+
+  async function sha256(txt:string){
+    var te = new TextEncoder;
+    let bf = await crypto.subtle.digest("SHA-256",te.encode('txto' + txt))  
+    const hashArray = Array.from(new Uint8Array(bf));
+    const hashHex = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
+    return hashHex
+  }
+
+  async function getCount(){
+    var key = new Date().toISOString().substring(0,10);
+    var s = localStorage.getItem(await sha256(key))
+    if(s){
+      return Number(s)
+    }
+    return 0
+  }
+
+  async function increaseCount(){
+    let t = await getCount()
+    t += 1;
+    var key = new Date().toISOString().substring(0,10);
+    localStorage.setItem(await sha256(key),'' + t )
+  }
+
   async function _submit() {
     var content = getValue("content-input");
     if (!content) {
@@ -207,7 +244,7 @@
       "application/x-www-form-urlencoded"
     );
     request.responseType = "json";
-
+    increaseCount()
     request.onload = function () {
       // if (request.status !== 200) {
       //   alert("Error fetching data.");
@@ -215,6 +252,7 @@
       {
         var data = request.response;
         if (data && data.code == 0) {
+          increaseCount()
           var jsonhash = encodeURIComponent(JSON.stringify(data));
           setTimeout(() => {
             location.href = "/succ#" + jsonhash;
@@ -244,9 +282,11 @@
     }
   }
 
-  (document.querySelector("#logout")! as HTMLElement).onclick = () => {
-    logout();
-
-    location.href = "/";
-  };
+  var lgout = document.querySelector("#logout") as HTMLElement
+  if(lgout){
+    lgout.onclick = () => {
+      logout();
+      location.href = "/";
+    }
+  }
 })();
