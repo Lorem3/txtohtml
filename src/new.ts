@@ -201,7 +201,7 @@
 
     const request = new XMLHttpRequest();
 
-    request.open("POST", "/");
+    request.open("POST", "/addPost");
     request.setRequestHeader(
       "Content-type",
       "application/x-www-form-urlencoded"
@@ -209,17 +209,18 @@
     request.responseType = "json";
 
     request.onload = function () {
-      if (request.status !== 200) {
-        alert("Error fetching data.");
-      } else {
+      // if (request.status !== 200) {
+      //   alert("Error fetching data.");
+      // } else 
+      {
         var data = request.response;
-        if (data.code == 0) {
+        if (data && data.code == 0) {
           var jsonhash = encodeURIComponent(JSON.stringify(data));
           setTimeout(() => {
             location.href = "/succ#" + jsonhash;
           }, 100);
         } else {
-          showMsg(data.err);
+          showMsg( (data && data.err) || "error happened");
         }
       }
       return;
