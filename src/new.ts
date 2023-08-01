@@ -157,7 +157,7 @@
     showLoading(true);
     let c = await getCount()
     if(c > 10){
-      await wait(Math.pow(2,c- 10 ))
+      await wait(Math.pow(1.5,c- 10 ))
     }
     setTimeout(() => {
        _submit()
@@ -215,6 +215,8 @@
     
     let s = await genSign(content)
     var bodyObj = { content: content, expire: expire ,...s} as any;
+    let c = await getCount()
+    bodyObj.C = c ;
     console.log(bodyObj)
 
     if (flag > 0) {
