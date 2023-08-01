@@ -156,8 +156,8 @@
     }
     showLoading(true);
     let c = await getCount()
-    if(c > 10){
-      await wait(Math.pow(1.5,c- 10 ))
+    if(c > 15){
+      await wait(Math.pow(1.5,c- 15 ))
     }
     setTimeout(() => {
        _submit()
