@@ -113,7 +113,7 @@
     } else {
       document.getElementById(
         "currentdomain"
-      )!.innerHTML = `<a href="/rand">Random</a> | <a href="/login">Login</a>`;
+      )!.innerHTML = `  <a href="/login">Login</a>`;
     }
   })();
 
