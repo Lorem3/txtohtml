@@ -156,9 +156,9 @@
     }
     showLoading(true);
     let c = await getCount()
-    if(c > 15){
-      let wt = Math.pow(1.5,c- 15 );
-      wt = wt > 60 ? 60 : wt
+    if(c > 10){
+      let wt = Math.pow(1.5,c- 10 );
+      wt = wt > 180 ? 180 : wt
       await wait(wt)
     }
     setTimeout(() => {
