@@ -75,6 +75,10 @@
     }
   }
 
+
+  console.log('count',genSign('content'))
+  
+
     
   function closeLoading() {
     showLoading(false);
