@@ -100,6 +100,7 @@
         var cclog = console.log;
         cclog(data)
 				if (data.code == 0) {
+          document.getElementById('statuslink')!.innerHTML = data.count
 				} else {
  
 				}

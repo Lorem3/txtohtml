@@ -98,6 +98,9 @@
         cclog(data)
 				if (data.code == 0) {
           document.getElementById('count')!.innerHTML = data.count
+          let date = new Date(new Date(data.msg).getTime() + 3600000 * 8)
+          
+          document.getElementById('msg')!.innerHTML = date.toISOString().replace(/T|Z/g,' ')
 				} else {
  
 				}
