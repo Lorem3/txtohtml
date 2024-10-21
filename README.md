@@ -16,4 +16,11 @@ tsc && node genhtml.js
 
 
 
+
+
+`
+ pack dis/html
+`
+
+# 编译 + 打包
 npm run build
