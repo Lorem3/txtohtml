@@ -36,6 +36,11 @@ const minifyConfig = {
   const suffix = "-template.html";
  
 
+  let innerCss  = fs.readFileSync('./html/innercss.css').toString()
+  innerCss = `
+  <style>
+  ${innerCss}
+  </style>`
   arr.forEach(async (filename) => {
     if (
       filename.length > suffix.length &&
@@ -44,6 +49,9 @@ const minifyConfig = {
       var jsname = filename.substring(0, filename.length - suffix.length);
       console.log(jsname);
       var tmp = fs.readFileSync("./html/" + filename).toString();
+
+      tmp = tmp.replace("</head>",`${innerCss}\n</head>`)
+
       tmp = await htmlminify(tmp, htmlconfig);
       var js = fs.readFileSync(`./dis/${jsname}.js`).toString();
 
