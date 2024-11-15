@@ -53,7 +53,14 @@ const minifyConfig = {
       tmp = tmp.replace("</head>",`${innerCss}\n</head>`)
 
       tmp = await htmlminify(tmp, htmlconfig);
-      var js = fs.readFileSync(`./dis/${jsname}.js`).toString();
+
+      var js
+      if(fs.existsSync(`./dis/${jsname}.js`)){
+         js = fs.readFileSync(`./dis/${jsname}.js`).toString();
+      }else{
+        js = ''
+      }
+      
 
       if(process.argv[2] == 'DEBUG'){
 
