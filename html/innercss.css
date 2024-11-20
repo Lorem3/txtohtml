@@ -10,12 +10,12 @@ a{
  
     display: inline-block;
     /* background-image: url('//cdn.jsdelivr.net/npm/txto@1.5.7/txto.svg'); */
-    content: url('//cdn.jsdelivr.net/npm/txto@1.5.9/txto.svg');
+    content: url('//cdn.jsdelivr.net/npm/txto@1.6.0/txto.svg');
 }
 
 .logo-sml{
  
     display: inline-block;
     /* background-image: url('//cdn.jsdelivr.net/npm/txto@1.5.7/txto.svg'); */
-    content: url('//cdn.jsdelivr.net/npm/txto@1.5.9/txto-small.svg');
+    content: url('//cdn.jsdelivr.net/npm/txto@1.6.0/txto-small.svg');
 }
