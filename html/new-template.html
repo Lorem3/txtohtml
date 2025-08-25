@@ -212,7 +212,195 @@ placeholder='Markdown syntax supported
 		<div class="close-btn">&times;</div>
 	</div>
 
-</div></body>
+</div>
+
+<!-- Crypto Donation Banner: self-contained -->
+<div class="crypto-banner" role="region" aria-label="Crypto donation">
+	<div class="cb-inner">
+	  <div class="cb-left">
+		<span class="cb-badge">Support Us</span>
+		<span class="cb-title">Crypto Donations</span>
+		<span class="cb-desc">Your support helps us maintain and grow the project</span>
+	  </div>
+  
+	  <div class="cb-center">
+		<label class="cb-label" for="cb-coin">Coin</label>
+		<select id="cb-coin" class="cb-select" aria-label="Select coin to donate">
+		</select>
+  
+		<div class="cb-address-wrap">
+		  <code id="cb-address" class="cb-address" aria-live="polite" aria-atomic="true"></code>
+		  <button id="cb-copy" class="cb-btn" type="button" aria-label="Copy address">Copy</button>
+		</div>
+	  </div>
+  
+	  <div class="cb-right">
+		<a class="cb-cta" href="https://www.okx.com/buy-crypto" target="_blank" rel="nofollow noopener">Buy Crypto</a>
+		<button id="cb-close" class="cb-close" type="button" aria-label="Close banner">X</button>
+	  </div>
+	</div>
+  </div>
+  
+  <style>
+	.crypto-banner {
+	  position: sticky;
+	  top: 0;
+	  z-index: 9999;
+	  background: linear-gradient(90deg, #0f172a, #111827);
+	  color: #e5e7eb;
+	  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+	  box-shadow: 0 4px 18px rgba(0,0,0,.25);
+	  border-radius: 10px;
+	  overflow: hidden;
+
+	  margin-bottom: 5rem;
+	}
+	.crypto-banner .cb-inner {
+	  max-width: 1100px;
+	  margin: 0 auto;
+	  padding: 10px 16px;
+	  display: grid;
+	  grid-template-columns: 1fr 1.2fr auto;
+	  gap: 12px;
+	  align-items: center;
+	}
+	.cb-left { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+	.cb-badge {
+	  background: #22c55e1a;
+	  color: #22c55e;
+	  border: 1px solid #22c55e33;
+	  padding: 2px 8px;
+	  border-radius: 999px;
+	  font-size: 12px;
+	}
+	.cb-title { font-weight: 700; color: #fafafa; }
+	.cb-desc { color: #9ca3af; font-size: 13px; }
+  
+	.cb-center { display: grid; grid-template-columns: 80px 1fr; gap: 8px 10px; align-items: center; }
+	.cb-label { color: #d1d5db; font-size: 13px; }
+	.cb-select {
+	  background: #0b1220;
+	  color: #e5e7eb;
+	  border: 1px solid #334155;
+	  border-radius: 8px;
+	  padding: 8px 10px;
+	  outline: none;
+	}
+	.cb-select:focus { border-color: #22c55e99; box-shadow: 0 0 0 3px #22c55e22; }
+  
+	.cb-address-wrap {
+	  grid-column: 1 / -1;
+	  display: grid;
+	  grid-template-columns: 1fr auto;
+	  gap: 8px;
+	  align-items: center;
+	}
+	.cb-address {
+	  background: #0b1220;
+	  color: #e5e7eb;
+	  border: 1px solid #334155;
+	  border-radius: 8px;
+	  padding: 8px 10px;
+	  display: block;
+	  white-space: nowrap;
+	  overflow: hidden;
+	  text-overflow: ellipsis;
+	}
+	.cb-btn {
+	  background: #22c55e;
+	  color: #0b1220;
+	  border: none;
+	  padding: 8px 12px;
+	  border-radius: 8px;
+	  cursor: pointer;
+	  font-weight: 600;
+	}
+	.cb-btn:active { transform: translateY(1px); }
+  
+	.cb-right { display: flex; align-items: center; gap: 10px; }
+	.cb-cta {
+	  text-decoration: none;
+	  background: #0ea5e9;
+	  color: #081018;
+	  padding: 8px 12px;
+	  border-radius: 8px;
+	  font-weight: 600;
+	}
+	.cb-cta:hover { filter: brightness(1.08); }
+	.cb-close {
+	  background: transparent;
+	  color: #9ca3af;
+	  width: 24px; height: 24px;
+	  min-width: 24px; max-width: 24px;
+	  border-radius: 12px;
+	  cursor: pointer;
+	  font-size: 14px; line-height: 14px;
+	  display: grid; place-items: center;
+	  flex: 0 0 24px;
+	  align-items: center	;
+	  justify-content: center;
+	}
+  
+	@media (max-width: 860px) {
+	  .crypto-banner .cb-inner { grid-template-columns: 1fr; gap: 8px; }
+	  .cb-left { order: 1; }
+	  .cb-center { order: 2; grid-template-columns: 70px 1fr; }
+	  .cb-right { order: 3; justify-content: space-between; }
+	}
+  </style>
+  
+  <script>
+	(function () {
+	  const coinSelect = document.getElementById('cb-coin');
+	  const addressEl = document.getElementById('cb-address');
+	  const copyBtn = document.getElementById('cb-copy');
+	  const closeBtn = document.getElementById('cb-close');
+  
+	  const coinToAddress = {
+		'USDT-TRC20': 'TEGG2Cx8Dh1k5tFsYwjvW4Qo9BC9TLuLjd',
+		'BTC': 'bc1p09dwaedfg3ssffh43r2kxa8w5aj77qcahec0qajj3wxegnallfjqke33gu',
+		'ETH': '0xc4ac14f71cc6fd1f869302fa782dd76b7cfb7bd1',
+		'SOL': '6npZGDMcE9kKvx7ccHvi1Z9uAZPtrcFM8ggatasx3HYK'
+	  };
+  
+	  // Populate coin options dynamically from coinToAddress keys
+	  while (coinSelect.firstChild) { coinSelect.removeChild(coinSelect.firstChild); }
+	  Object.keys(coinToAddress).forEach(function (coin, index) {
+		var opt = document.createElement('option');
+		opt.value = coin;
+		opt.textContent = coin;
+		if (index === 0) opt.selected = true;
+		coinSelect.appendChild(opt);
+	  });
+
+	  function updateAddress() {
+		const coin = coinSelect.value;
+		addressEl.textContent = coinToAddress[coin] || '';
+	  }
+  
+	  coinSelect.addEventListener('change', updateAddress);
+	  updateAddress();
+  
+	  copyBtn.addEventListener('click', async function () {
+		try {
+		  await navigator.clipboard.writeText(addressEl.textContent);
+		  const original = copyBtn.textContent;
+		  copyBtn.textContent = 'Copied';
+		  copyBtn.disabled = true;
+		  setTimeout(() => { copyBtn.textContent = original; copyBtn.disabled = false; }, 1200);
+		} catch (e) {
+		  alert('Copy failed, please copy the address manually.');
+		}
+	  });
+  
+	  closeBtn.addEventListener('click', function () {
+		const banner = document.querySelector('.crypto-banner');
+		if (banner) banner.style.display = 'none';
+	  });
+	})();
+  </script>
+
+</body>
 <script>
     __JS__
 </script>
