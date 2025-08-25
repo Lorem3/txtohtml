@@ -355,6 +355,7 @@ placeholder='Markdown syntax supported
 	  const addressEl = document.getElementById('cb-address');
 	  const copyBtn = document.getElementById('cb-copy');
 	  const closeBtn = document.getElementById('cb-close');
+ 	  const banner = document.querySelector('.crypto-banner');
   
 	  const coinToAddress = {
 		'USDT-TRC20': 'TEGG2Cx8Dh1k5tFsYwjvW4Qo9BC9TLuLjd',
@@ -363,6 +364,14 @@ placeholder='Markdown syntax supported
 		'SOL': '6npZGDMcE9kKvx7ccHvi1Z9uAZPtrcFM8ggatasx3HYK'
 	  };
   
+	  // Local hide for 3 days after close
+	  try {
+		const hideUntil = parseInt(localStorage.getItem('cb_hide_until') || '0', 10);
+		if (!isNaN(hideUntil) && hideUntil > Date.now()) {
+		  if (banner) banner.style.display = 'none';
+		}
+	  } catch (e) {}
+
 	  // Populate coin options dynamically from coinToAddress keys
 	  while (coinSelect.firstChild) { coinSelect.removeChild(coinSelect.firstChild); }
 	  Object.keys(coinToAddress).forEach(function (coin, index) {
@@ -394,7 +403,11 @@ placeholder='Markdown syntax supported
 	  });
   
 	  closeBtn.addEventListener('click', function () {
-		const banner = document.querySelector('.crypto-banner');
+		try {
+		  var threeDays = 3 * 24 * 60 * 60 * 1000;
+		  var until = Date.now() + threeDays;
+		  localStorage.setItem('cb_hide_until', '' + until);
+		} catch (e) {}
 		if (banner) banner.style.display = 'none';
 	  });
 	})();
