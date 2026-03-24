@@ -2,8 +2,12 @@ a{
     color: #60a5fa;
 }
 
+body{
+    max-width: 780px;
+    padding: 1em;
+}
 .maincard{
-    padding: 5px;
+    padding: 0px;
 }
 
 .logo{
