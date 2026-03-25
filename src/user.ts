@@ -178,20 +178,23 @@ var PageFunc = (function a(){
 	}
 
 	
+	var accName = decodeURIComponent(location.hash.replace(/^#/, ''));
+
 	async function getList(){
 		showLoading(true)
 
-		let sign = await genSign("list" + PAGE)
-		console.log('list' + PAGE)
+		let sign = await genSign("ulist" + accName + PAGE)
+		console.log('ulist' + accName + PAGE)
 		console.log(sign.sign,sign.time)
 		var bodyObj = {
 			PAGE:PAGE,
+			accName:accName,
 			...sign
 		}
 		var body = JSON.stringify(bodyObj)
 		
 		const request = new XMLHttpRequest();
-		request.open("POST", "/list");
+		request.open("POST", "/userpostlist");
 		request.setRequestHeader("Content-type", "application/json");
 		request.responseType = "json";
 		
@@ -217,7 +220,7 @@ var PageFunc = (function a(){
 							 	<a class="delete" href="#" onclick=PageFunc.deletepage("${element.pageid}")> Delete</a>
 								 &nbsp; 
 								<a class="edit" href="/${element.url}/edit" )> Edit</a>
-							${element.accname ? `&nbsp; <a class="username" href="/user#${element.accname}">${element.accname}</a>` : ''}
+							${element.accname ? `&nbsp; <a class="username" href="/user/${element.accname}">${element.accname}</a>` : ''}
 							 </text>  
 							 <br> <br> 
 							 <a class='post' href = "/${element.url}">   ${element.desc }</a></a>`
