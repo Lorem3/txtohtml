@@ -1,5 +1,6 @@
 console.log("please run tsc in terminal before you generate html");
 const fs = require("fs");
+const crypto = require("crypto");
 const { minify } = require("terser");
 const htmlterser= require('html-minifier-terser');
 const htmlminify = htmlterser.minify
@@ -60,6 +61,10 @@ const minifyConfig = {
       }else{
         js = ''
       }
+      const genSignJs = fs.existsSync('./dis/genSign.js')
+        ? fs.readFileSync('./dis/genSign.js').toString()
+        : '';
+      js = genSignJs + '\n' + js;
       
 
       if(process.argv[2] == 'DEBUG'){
@@ -68,7 +73,9 @@ const minifyConfig = {
         js = (await minify(js, minifyConfig)).code;
       }
       
-      var html2 = tmp.replace("__JS__", js);
+      const jsHash = crypto.createHash('sha256').update(js).digest('hex').substring(0, 16);
+      const buildTime = new Date().toISOString();
+      var html2 = tmp.replace("__JS__", `/* js:${jsHash} t:${buildTime} */\n(function(){${js}})()`);
       fs.writeFileSync(`./${htmldis}/${jsname}.html`, html2);
     }else if(filename.length > '5' && filename.substring(filename.length - 5,filename.length) == '.html'){
       fs.cpSync("./html/" + filename,'./dis/html/'+filename)

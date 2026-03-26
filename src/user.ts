@@ -1,80 +1,6 @@
 var PageFunc = (function a(){
-	var PAGE = 0
-	async function genSign(content: string) {
-		console.log("content",content)
-		// var MINZER0 = 15;
-		var t1 = Date.now();
-		var time = ("" + t1).substring(0, 10);
-	
-		var pre = time + content;
-		var te = new TextEncoder();
-	
-		var rnd = new Uint8Array(32);
-		while (true) {
-		  await crypto.getRandomValues(rnd);
-		  var uuid = btoa(rnd as unknown as string).substring(0, 32);
-		  let d = await crypto.subtle.digest("SHA-256", te.encode(pre + uuid));
-		  d = await crypto.subtle.digest("SHA-256", d);
-		  let ui8 = new Uint8Array(d);
-		  // 计算开头bit0数量
-		  var Cnt = 0;
-		  for (let index = 0; index < 32; index++) {
-			const n = ui8[index];
-			if ((n & 128) == 0) {
-			  Cnt += 1;
-			} else {
-			  break;
-			}
-			if ((n & 64) == 0) {
-			  Cnt += 1;
-			} else {
-			  break;
-			}
-			if ((n & 32) == 0) {
-			  Cnt += 1;
-			} else {
-			  break;
-			}
-			if ((n & 16) == 0) {
-			  Cnt += 1;
-			} else {
-			  break;
-			}
-			if ((n & 8) == 0) {
-			  Cnt += 1;
-			} else {
-			  break;
-			}
-			if ((n & 4) == 0) {
-			  Cnt += 1;
-			} else {
-			  break;
-			}
-	
-			if ((n & 2) == 0) {
-			  Cnt += 1;
-			} else {
-			  break;
-			}
-	
-			if ((n & 1) == 0) {
-			  Cnt += 1;
-			} else {
-			  break;
-			}
-	
-			if (Cnt >= MINZER0) {
-			  break;
-			}
-		  }
-	
-		  if (Cnt >= MINZER0) {
-			console.log(MINZER0,pre + uuid, Date.now() - t1);
-	
-			return { time, sign: uuid };
-		  }
-		}
-	  }
+	var PAGE = 0;
+
 	(function(){
 		var t =  decodeURIComponent(getCookie('accname') )  
 		if(t){
@@ -151,7 +77,7 @@ var PageFunc = (function a(){
 		showLoading(true)
 		var oriEditCode = ""
 
-		let sign = await genSign("delete"+pageid)
+		let sign = await genSign("delete"+pageid, MINZER0)
 
 		var body = JSON.stringify({
 			pageId:pageid,
@@ -193,7 +119,7 @@ var PageFunc = (function a(){
 	async function getList(){
 		showLoading(true)
 
-		let sign = await genSign("ulist" + accName + PAGE)
+		let sign = await genSign("ulist" + accName + PAGE, MINZER0)
 		console.log('ulist' + accName + PAGE)
 		console.log(sign.sign,sign.time)
 		var bodyObj = {

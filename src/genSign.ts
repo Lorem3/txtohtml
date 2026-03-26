@@ -1,0 +1,33 @@
+async function genSign(content: string, minZero: number) {
+    var t1 = Date.now();
+    var time = ("" + t1).substring(0, 10);
+
+    var pre = time + content;
+    var te = new TextEncoder();
+
+    var rnd = new Uint8Array(32);
+    while (true) {
+        await crypto.getRandomValues(rnd);
+        var uuid = btoa(rnd as unknown as string).substring(0, 32);
+        let d = await crypto.subtle.digest("SHA-256", te.encode(pre + uuid));
+        d = await crypto.subtle.digest("SHA-256", d);
+        let ui8 = new Uint8Array(d);
+        // 计算开头bit0数量
+        var Cnt = 0;
+        for (let index = 0; index < 32; index++) {
+            const n = ui8[index];
+            if ((n & 128) == 0) { Cnt += 1; } else { break; }
+            if ((n & 64) == 0) { Cnt += 1; } else { break; }
+            if ((n & 32) == 0) { Cnt += 1; } else { break; }
+            if ((n & 16) == 0) { Cnt += 1; } else { break; }
+            if ((n & 8) == 0) { Cnt += 1; } else { break; }
+            if ((n & 4) == 0) { Cnt += 1; } else { break; }
+            if ((n & 2) == 0) { Cnt += 1; } else { break; }
+            if ((n & 1) == 0) { Cnt += 1; } else { break; }
+            if (Cnt >= minZero) { break; }
+        }
+        if (Cnt >= minZero) {
+            return { time, sign: uuid };
+        }
+    }
+}
