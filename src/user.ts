@@ -136,6 +136,14 @@ var PageFunc = (function a(){
 		alert(msg)
 	}
 
+	function escapeHtml(s: string) {
+		return s.replace(/&/g, '&amp;')
+				.replace(/</g, '&lt;')
+				.replace(/>/g, '&gt;')
+				.replace(/"/g, '&quot;')
+				.replace(/'/g, '&#39;');
+	}
+
 	async function deletepage(pageid:string){
 		if (!confirm("do you want to delete this post ?")) {
 			return
@@ -225,7 +233,7 @@ var PageFunc = (function a(){
 							${element.accname ? `&nbsp; <a class="username" href="/user/${element.accname}">${element.accname}</a>` : ''}
 							 </text>  
 							 <br> <br> 
-							 <a class='post' href = "/${element.url}">   ${element.desc }</a></a>`
+							 <a class='post' href = "/${element.url}"><pre>${escapeHtml(element.desc || '')}</pre></a></a>`
 							ul?.append(newItem)
 							
 							
