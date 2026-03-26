@@ -118,6 +118,8 @@ var PageFunc = (function a(){
 
 
      
+	 var accName = decodeURIComponent(location.hash.replace(/^#/, ''));
+
 	 var btnMore = document.getElementById("showmore") as HTMLInputElement;
 	 btnMore.onclick = showmore;
 
@@ -187,7 +189,7 @@ var PageFunc = (function a(){
 		console.log('ulist' + accName + PAGE)
 		console.log(sign.sign,sign.time)
 		var bodyObj = {
-			PAGE:PAGE,
+			page:PAGE,
 			accName:accName,
 			...sign
 		}
