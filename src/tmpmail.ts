@@ -88,8 +88,8 @@ type TmpMailDetailResp = {
     countdownTimer = window.setInterval(() => {
       const left = expireAt - Math.floor(Date.now() / 1000);
       if (left <= 0) {
-        countdownEl.innerText = "已过期";
-        setStatus("邮箱已过期，轮询已停止");
+        countdownEl.innerText = "Expired";
+        setStatus("Mailbox expired, polling stopped");
         stopPolling();
         token = "";
         return;
@@ -136,9 +136,9 @@ type TmpMailDetailResp = {
     const startedAt = Date.now();
     try {
       createBtn.disabled = true;
-      setStatus("正在创建邮箱（PoW 计算中）...");
+      setStatus("Creating mailbox (calculating PoW)...");
       detailCard.style.display = "none";
-      setListEmpty("加载中...");
+      setListEmpty("Loading...");
       const s = await genSign("newMail", MINZER0_CreateEmail);
       const body = JSON.stringify({ time: s.time, sign: s.sign });
       const data = await reqJson<TmpMailCreateResp>("/tmpmail/new", "POST", body);
@@ -151,14 +151,14 @@ type TmpMailDetailResp = {
       location.hash = encodeURIComponent(token);
       addressEl.innerText = data.address;
       const costMs = Date.now() - startedAt;
-      setStatus(`邮箱创建成功（createTmpMail 耗时: ${costMs}ms），正在轮询收件箱...`);
+      setStatus(`Mailbox created (createTmpMail cost: ${costMs}ms), polling inbox...`);
       startCountdown();
       startPolling();
       await loadInbox();
     } catch (e) {
-      setStatus("创建邮箱失败");
-      setListEmpty("创建失败，请重试");
-      alert((e as Error).message || "创建邮箱失败");
+      setStatus("Failed to create mailbox");
+      setListEmpty("Create failed, please retry");
+      alert((e as Error).message || "Failed to create mailbox");
     } finally {
       createBtn.disabled = false;
     }
@@ -173,16 +173,16 @@ type TmpMailDetailResp = {
     if (!token) {
       return;
     }
-    addressEl.innerText = "来自链接 hash（仅恢复轮询）";
+    addressEl.innerText = "Recovered from URL hash (polling only)";
     countdownEl.innerText = "--";
-    setStatus("检测到 hash token，已自动恢复轮询");
+    setStatus("Hash token detected, polling restored automatically");
     startPolling();
     void loadInbox();
   }
 
   function renderInbox(items: TmpMailItem[]) {
     if (!items.length) {
-      setListEmpty("暂无邮件，轮询中...");
+      setListEmpty("No messages yet, polling...");
       return;
     }
     listEl.innerHTML = "";
@@ -216,7 +216,7 @@ type TmpMailDetailResp = {
       }
       renderInbox(data.messages || []);
     } catch (e) {
-      setStatus("收件箱轮询失败，将继续重试");
+      setStatus("Inbox polling failed, retrying...");
       console.log(e);
     }
   }
@@ -226,7 +226,7 @@ type TmpMailDetailResp = {
       return;
     }
     try {
-      setStatus("正在加载邮件详情...");
+      setStatus("Loading message details...");
       const s = await genSign("mailmsg" + token + id, MINZER0);
       const url = `/tmpmail/message?token=${encodeURIComponent(token)}&id=${encodeURIComponent(
         id
@@ -241,10 +241,10 @@ type TmpMailDetailResp = {
       detailTime.innerText = new Date(data.message.received_at * 1000).toLocaleString();
       detailBody.innerText = data.message.body || "";
       detailHtml.innerHTML = data.message.html || "";
-      setStatus("邮件详情加载完成");
+      setStatus("Message details loaded");
     } catch (e) {
-      alert((e as Error).message || "获取详情失败");
-      setStatus("邮件详情加载失败");
+      alert((e as Error).message || "Failed to load message details");
+      setStatus("Message details load failed");
     }
   }
 
