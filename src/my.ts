@@ -151,7 +151,7 @@ var PageFunc = (function a(){
 							 	<a class="delete" href="#" onclick=PageFunc.deletepage("${element.pageid}")> Delete</a>
 								 &nbsp; 
 								<a class="edit" href="/${element.url}/edit" )> Edit</a>
-							${element.accname ? `&nbsp; <a class="username" href="/user#${element.accname}">${element.accname}</a>` : ''}
+							${element.accname ? `&nbsp; <a class="username" href="/user?u=${element.accname}">${element.accname}</a>` : ''}
 							 </text>  
 							 <br> <br> 
 							 <a class='post' href = "/${element.url}"><pre>${escapeHtml(element.desc || '')}</pre></a></a>`

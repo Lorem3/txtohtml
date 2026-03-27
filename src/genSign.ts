@@ -1,12 +1,18 @@
 async function genSign(content: string, minZero: number) {
+    var te = new TextEncoder();
+    var rnd = new Uint8Array(32);
+    var loopCnt = 0;
     var t1 = Date.now();
     var time = ("" + t1).substring(0, 10);
-
     var pre = time + content;
-    var te = new TextEncoder();
-
-    var rnd = new Uint8Array(32);
     while (true) {
+        if (loopCnt % 100 === 0) {
+            t1 = Date.now();
+            time = ("" + t1).substring(0, 10);
+            pre = time + content;
+            loopCnt = 0;
+        }
+        loopCnt++;
         await crypto.getRandomValues(rnd);
         var uuid = btoa(rnd as unknown as string).substring(0, 32);
         let d = await crypto.subtle.digest("SHA-256", te.encode(pre + uuid));
