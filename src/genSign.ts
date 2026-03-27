@@ -6,7 +6,7 @@ async function genSign(content: string, minZero: number) {
     var time = ("" + t1).substring(0, 10);
     var pre = time + content;
     while (true) {
-        if (loopCnt % 100 === 0) {
+        if (loopCnt  === 5000) {
             t1 = Date.now();
             time = ("" + t1).substring(0, 10);
             pre = time + content;

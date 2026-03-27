@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+ 
+ 
+<head>
+	<!-- new server -->
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta name="Description"
+		content="Txto is a free service that lets you create the fastest, simplest, most shareable web pages on the internet using any phone, tablet, or computer you have." />
+	<meta name="author" content="Wei" />
+
+	<meta property="og:url" content="https://txto.eu.org" />
+	<meta property="og:title" content="Txto - Fast web pages for everybody" />
+	<meta property="og:image" content="//cdn.jsdelivr.net/npm/txto@1.5.2/txto_196.png" />
+	<meta property="og:site_name" content="Txto" />
+	<meta property="og:description"
+		content="Txto is a free service that lets you create the fastest, simplest, most shareable web pages on the internet using any phone, tablet, or computer you have." />
+
+	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:site" content="@Txtoes" />
+	<meta name="twitter:creator" content="@txto2023" />
+	<meta name="twitter:title" content="Txto - Fast web pages for everybody" />
+	<meta name="twitter:description"
+		content="Txto is a free service that lets you create the fastest, simplest, most shareable web pages on the internet using any phone, tablet, or computer you have." />
+
+	<title>Temp Mail - Txto</title>
+
+	<link rel="shortcut icon" href="//cdn.jsdelivr.net/npm/txto@1.5.2/txto_16.png" />
+	<link rel="apple-touch-icon" sizes="57x57" href="//cdn.jsdelivr.net/npm/txto@1.5.2/txto_57.png" />
+	<link rel="apple-touch-icon" sizes="114x114" href="//cdn.jsdelivr.net/npm/txto@1.5.2/txto_144.png" />
+	<link rel="apple-touch-icon" sizes="72x72" href="//cdn.jsdelivr.net/npm/txto@1.5.2/txto_72.png" />
+	<link rel="apple-touch-icon" sizes="144x144" href="//cdn.jsdelivr.net/npm/txto@1.5.2/txto_144.png" />
+	<link rel="apple-touch-icon" sizes="60x60" href="//cdn.jsdelivr.net/npm/txto@1.5.2/txto_60.png" />
+	<link rel="apple-touch-icon" sizes="120x120" href="//cdn.jsdelivr.net/npm/txto@1.5.2/txto_120.png" />
+	<link rel="apple-touch-icon" sizes="76x76" href="//cdn.jsdelivr.net/npm/txto@1.5.2/txto_76.png" />
+	<link rel="apple-touch-icon" sizes="152x152" href="//cdn.jsdelivr.net/npm/txto@1.5.2/txto_152.png" />
+	<link rel="icon" type="image/png" href="//cdn.jsdelivr.net/npm/txto@1.5.2/txto_196.png" sizes="196x196" />
+	<link rel="icon" type="image/png" href="//cdn.jsdelivr.net/npm/txto@1.5.2/txto_160.png" sizes="160x160" />
+	<link rel="icon" type="image/png" href="//cdn.jsdelivr.net/npm/txto@1.5.2/txto_96.png" sizes="96x96" />
+	<link rel="icon" type="image/png" href="//cdn.jsdelivr.net/npm/txto@1.5.2/txto_16.png" sizes="16x16" />
+	<link rel="icon" type="image/png" href="//cdn.jsdelivr.net/npm/txto@1.5.2/txto_32.png" sizes="32x32" />
+	<meta name="msapplication-TileColor" content="#9f00a7" />
+	<meta name="msapplication-TileImage" content="//cdn.jsdelivr.net/npm/txto@1.5.2/txto_144.png" />
+	<meta name="msapplication-config" content="/browserconfig.xml" />
+
+	<link href="//cdn.jsdelivr.net/npm/txto@1.5.6/txto.min.css" rel="stylesheet" type="text/css" />
+	<style>
+		.tm-actions {
+			display: flex;
+			gap: 10px;
+			flex-wrap: wrap;
+			align-items: center;
+			margin: 10px 0 16px;
+		}
+		.tm-row {
+			margin: 8px 0;
+			word-break: break-all;
+		}
+		.tm-muted {
+			color: #666;
+		}
+		.tm-mail-list {
+			list-style: none;
+			padding: 0;
+			margin: 0;
+			border: 1px solid #ddd;
+			border-radius: 6px;
+			overflow: hidden;
+		}
+		.tm-mail-list li {
+			padding: 10px 12px;
+			border-bottom: 1px solid #eee;
+			cursor: pointer;
+			background: #fff;
+		}
+		.tm-mail-list li:last-child {
+			border-bottom: none;
+		}
+		.tm-mail-list li:hover {
+			background: #f7f9ff;
+		}
+		.tm-subject {
+			font-weight: 700;
+		}
+		.tm-small {
+			font-size: 12px;
+		}
+		.tm-card {
+			border: 1px solid #ddd;
+			border-radius: 6px;
+			padding: 12px;
+			margin-top: 12px;
+			background: #fff;
+		}
+		.tm-html-preview {
+			border: 1px solid #e5e5e5;
+			border-radius: 4px;
+			padding: 10px;
+			max-height: 320px;
+			overflow: auto;
+			background: #fafafa;
+		}
+	</style>
+</head>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZRPJZGBBVY"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-ZRPJZGBBVY');
+</script>
+
+
+<body>
+	<div class="maincard">
+		<h2><a class="logo" href="/">Txto</a></h2>
+		<p>一次性临时邮箱。默认有效期 10 分钟，可在部署端配置。</p>
+
+		<div class="tm-actions">
+			<button type="button" id="create-mail-btn">创建临时邮箱</button>
+			<button type="button" id="stop-poll-btn" disabled>停止轮询</button>
+		</div>
+
+		<div class="tm-row"><strong>邮箱地址：</strong><span id="mail-address">未创建</span></div>
+		<div class="tm-row"><strong>剩余时间：</strong><span id="mail-countdown">--</span></div>
+		<div class="tm-row tm-muted" id="mail-status">点击“创建临时邮箱”开始</div>
+
+		<h3>收件箱</h3>
+		<ul id="mail-list" class="tm-mail-list">
+			<li class="tm-muted">暂无邮件</li>
+		</ul>
+
+		<div id="mail-detail" class="tm-card" style="display: none;">
+			<div class="tm-row"><strong>From:</strong> <span id="detail-from"></span></div>
+			<div class="tm-row"><strong>Subject:</strong> <span id="detail-subject"></span></div>
+			<div class="tm-row tm-small tm-muted"><strong>Time:</strong> <span id="detail-time"></span></div>
+			<div class="tm-row"><strong>Text:</strong></div>
+			<pre id="detail-body" class="tm-html-preview"></pre>
+			<div class="tm-row"><strong>HTML:</strong></div>
+			<div id="detail-html" class="tm-html-preview"></div>
+		</div>
+	</div>
+</body>
+<script>
+    __JS__
+</script>
+
+</html>
