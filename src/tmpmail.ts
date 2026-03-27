@@ -15,6 +15,7 @@ type TmpMailItem = {
 
 type TmpMailListResp = {
   code: number;
+  address?: string;
   messages?: TmpMailItem[];
   err?: string;
 };
@@ -54,6 +55,7 @@ type TmpMailDetailResp = {
 
   createBtn.onclick = createTmpMail;
   stopBtn.onclick = stopPolling;
+  restoreFromHash();
 
   function setStatus(txt: string) {
     statusEl.innerText = txt;
@@ -146,6 +148,7 @@ type TmpMailDetailResp = {
 
       token = data.token;
       expireAt = data.expire;
+      location.hash = encodeURIComponent(token);
       addressEl.innerText = data.address;
       const costMs = Date.now() - startedAt;
       setStatus(`邮箱创建成功（createTmpMail 耗时: ${costMs}ms），正在轮询收件箱...`);
@@ -159,6 +162,22 @@ type TmpMailDetailResp = {
     } finally {
       createBtn.disabled = false;
     }
+  }
+
+  function restoreFromHash() {
+    const hash = location.hash;
+    if (!hash || hash.length < 2) {
+      return;
+    }
+    token = decodeURIComponent(hash.substring(1));
+    if (!token) {
+      return;
+    }
+    addressEl.innerText = "来自链接 hash（仅恢复轮询）";
+    countdownEl.innerText = "--";
+    setStatus("检测到 hash token，已自动恢复轮询");
+    startPolling();
+    void loadInbox();
   }
 
   function renderInbox(items: TmpMailItem[]) {
@@ -191,6 +210,9 @@ type TmpMailDetailResp = {
       const data = await reqJson<TmpMailListResp>(url, "GET");
       if (data.code !== 0) {
         throw new Error(data.err || "inbox load failed");
+      }
+      if (data.address) {
+        addressEl.innerText = data.address;
       }
       renderInbox(data.messages || []);
     } catch (e) {

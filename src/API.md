@@ -66,6 +66,7 @@
 ```json
 {
   "code": 0,
+  "address": "AbCdEf1234@txto.eu.org",
   "messages": [
     {
       "id": "msgid1",
