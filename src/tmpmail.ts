@@ -16,6 +16,7 @@ type TmpMailItem = {
 type TmpMailListResp = {
   code: number;
   address?: string;
+  expire?: number;
   messages?: TmpMailItem[];
   err?: string;
 };
@@ -219,6 +220,10 @@ type TmpMailDetailResp = {
       }
       if (data.address) {
         addressEl.innerText = data.address;
+      }
+      if (!expireAt && data.expire) {
+        expireAt = data.expire;
+        startCountdown();
       }
       renderInbox(data.messages || []);
     } catch (e) {
