@@ -54,8 +54,34 @@
 			margin: 10px 0 16px;
 		}
 		.tm-row {
-			margin: 8px 0;
+			margin: 8px 0 14px;
+			padding-right: 20px;
 			word-break: break-all;
+		}
+		.tm-copy-btn {
+			margin-left: 10px;
+		}
+		.tm-countdown {
+			font-size: 30px;
+			font-weight: 700;
+			color: #1f9d3a;
+			margin-left: 6px;
+			letter-spacing: 1px;
+			animation: tm-breathe 1.8s ease-in-out infinite;
+		}
+		@keyframes tm-breathe {
+			0% {
+				opacity: 0.75;
+				text-shadow: 0 0 0 rgba(31, 157, 58, 0.2);
+			}
+			50% {
+				opacity: 1;
+				text-shadow: 0 0 10px rgba(31, 157, 58, 0.45);
+			}
+			100% {
+				opacity: 0.75;
+				text-shadow: 0 0 0 rgba(31, 157, 58, 0.2);
+			}
 		}
 		.tm-muted {
 			color: #666;
@@ -125,8 +151,12 @@
 			<button type="button" id="stop-poll-btn" disabled>Stop Polling</button>
 		</div>
 
-		<div class="tm-row"><strong>Email Address:</strong><span id="mail-address">Not created</span></div>
-		<div class="tm-row"><strong>Remaining Time:</strong><span id="mail-countdown">--</span></div>
+		<div class="tm-row">
+			<strong>Email Address:</strong>
+			<span id="mail-address">Not created</span>
+			<button type="button" id="copy-mail-btn" class="tm-copy-btn" disabled>Copy</button>
+		</div>
+		<div class="tm-row"><strong>Remaining Time:</strong><span id="mail-countdown" class="tm-countdown">--:--</span></div>
 		<div class="tm-row tm-muted" id="mail-status">Click "Create Temporary Mailbox" to start</div>
 
 		<h3>Inbox</h3>
@@ -147,6 +177,61 @@
 </body>
 <script>
     __JS__
+</script>
+<script>
+	(function () {
+		const copyBtn = document.getElementById('copy-mail-btn');
+		const mailAddressEl = document.getElementById('mail-address');
+		const mailStatusEl = document.getElementById('mail-status');
+		if (!copyBtn || !mailAddressEl) return;
+
+		function getMailAddress() {
+			return (mailAddressEl.textContent || '').trim();
+		}
+
+		function canCopy(address) {
+			return !!address && address !== 'Not created';
+		}
+
+		function updateCopyButtonState() {
+			copyBtn.disabled = !canCopy(getMailAddress());
+		}
+
+		async function copyText(text) {
+			if (navigator.clipboard && navigator.clipboard.writeText) {
+				await navigator.clipboard.writeText(text);
+				return;
+			}
+			const helper = document.createElement('textarea');
+			helper.value = text;
+			helper.setAttribute('readonly', '');
+			helper.style.position = 'fixed';
+			helper.style.opacity = '0';
+			document.body.appendChild(helper);
+			helper.select();
+			document.execCommand('copy');
+			document.body.removeChild(helper);
+		}
+
+		copyBtn.addEventListener('click', async function () {
+			const address = getMailAddress();
+			if (!canCopy(address)) return;
+			try {
+				await copyText(address);
+				if (mailStatusEl) {
+					mailStatusEl.textContent = 'Email copied to clipboard.';
+				}
+			} catch (err) {
+				if (mailStatusEl) {
+					mailStatusEl.textContent = 'Copy failed. Please copy manually.';
+				}
+			}
+		});
+
+		const observer = new MutationObserver(updateCopyButtonState);
+		observer.observe(mailAddressEl, { childList: true, characterData: true, subtree: true });
+		updateCopyButtonState();
+	})();
 </script>
 
 </html>

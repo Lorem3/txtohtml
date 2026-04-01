@@ -79,25 +79,31 @@ type TmpMailDetailResp = {
 
   function startCountdown() {
     if (!expireAt) {
-      countdownEl.innerText = "--";
+      countdownEl.innerText = "--:--";
       return;
     }
     if (countdownTimer) {
       clearInterval(countdownTimer);
     }
-    countdownTimer = window.setInterval(() => {
+    const tick = () => {
       const left = expireAt - Math.floor(Date.now() / 1000);
       if (left <= 0) {
-        countdownEl.innerText = "Expired";
+        countdownEl.innerText = "00:00";
         setStatus("Mailbox expired, polling stopped");
         stopPolling();
         token = "";
         return;
       }
-      const min = Math.floor(left / 60);
-      const sec = left % 60;
-      countdownEl.innerText = `${min}m ${sec}s`;
-    }, 1000);
+      countdownEl.innerText = formatCountdown(left);
+    };
+    tick();
+    countdownTimer = window.setInterval(tick, 1000);
+  }
+
+  function formatCountdown(totalSec: number) {
+    const min = Math.floor(totalSec / 60);
+    const sec = totalSec % 60;
+    return `${String(min).padStart(2, "0")}:${String(sec).padStart(2, "0")}`;
   }
 
   function startPolling() {
@@ -174,7 +180,7 @@ type TmpMailDetailResp = {
       return;
     }
     addressEl.innerText = "Recovered from URL hash (polling only)";
-    countdownEl.innerText = "--";
+    countdownEl.innerText = "--:--";
     setStatus("Hash token detected, polling restored automatically");
     startPolling();
     void loadInbox();
