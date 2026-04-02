@@ -5,3 +5,4 @@ declare var MINZER0_Add:number
 
 
 declare var MINZER0_CreateEmail:number
+declare var MINZER0_MailTTL:number
