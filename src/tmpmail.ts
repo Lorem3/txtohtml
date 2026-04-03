@@ -34,6 +34,14 @@ type TmpMailDetailResp = {
   err?: string;
 };
 
+type TmpMailReactivateResp = {
+  code: number;
+  address?: string;
+  token?: string;
+  expire?: number;
+  err?: string;
+};
+
 (function tmpMailPage() {
   let token = "";
   let expireAt = 0;
@@ -41,7 +49,7 @@ type TmpMailDetailResp = {
   let countdownTimer = 0;
 
   const createBtn = document.getElementById("create-mail-btn") as HTMLButtonElement;
-  const stopBtn = document.getElementById("stop-poll-btn") as HTMLButtonElement;
+  const reactivateBtn = document.getElementById("reactivate-mail-btn") as HTMLButtonElement;
   const addressEl = document.getElementById("mail-address") as HTMLElement;
   const countdownEl = document.getElementById("mail-countdown") as HTMLElement;
   const statusEl = document.getElementById("mail-status") as HTMLElement;
@@ -53,17 +61,33 @@ type TmpMailDetailResp = {
   const detailTime = document.getElementById("detail-time") as HTMLElement;
   const detailBody = document.getElementById("detail-body") as HTMLElement;
   const detailHtml = document.getElementById("detail-html") as HTMLElement;
+  const detailPlaceholder = document.getElementById("mail-detail-placeholder") as HTMLElement | null;
 
   createBtn.onclick = createTmpMail;
-  stopBtn.onclick = stopPolling;
+  reactivateBtn.onclick = reactivateTmpMail;
   restoreFromHash();
+  updateReactivateButton();
 
   function setStatus(txt: string) {
     statusEl.innerText = txt;
   }
 
   function setListEmpty(txt: string) {
-    listEl.innerHTML = `<li class="tm-muted">${txt}</li>`;
+    listEl.innerHTML = `<li class="tm-muted">${escapeHtml(txt)}</li>`;
+  }
+
+  const MAIL_ADDRESS_PLACEHOLDERS = ["Not created", "Recovered from URL hash (polling only)"];
+
+  /** 若页面上尚未展示真实邮箱（占位文案或不含 @），poll 返回的 address 应写入 */
+  function needsAddressFromInboxPoll(): boolean {
+    const t = (addressEl.textContent || "").trim();
+    if (!t) {
+      return true;
+    }
+    if (MAIL_ADDRESS_PLACEHOLDERS.includes(t)) {
+      return true;
+    }
+    return !t.includes("@");
   }
 
   function stopPolling() {
@@ -75,12 +99,29 @@ type TmpMailDetailResp = {
       clearInterval(countdownTimer);
       countdownTimer = 0;
     }
-    stopBtn.disabled = true;
+  }
+
+  function updateReactivateButton() {
+    reactivateBtn.disabled = !token;
+  }
+
+  function showDetailEmpty() {
+    detailCard.style.display = "none";
+    if (detailPlaceholder) {
+      detailPlaceholder.style.display = "block";
+    }
+  }
+
+  function showDetailPanel() {
+    detailCard.style.display = "block";
+    if (detailPlaceholder) {
+      detailPlaceholder.style.display = "none";
+    }
   }
 
   function startCountdown() {
     if (!expireAt) {
-      countdownEl.innerText = "--:--";
+      countdownEl.innerText = "00:00";
       return;
     }
     if (countdownTimer) {
@@ -90,9 +131,8 @@ type TmpMailDetailResp = {
       const left = expireAt - Math.floor(Date.now() / 1000);
       if (left <= 0) {
         countdownEl.innerText = "00:00";
-        setStatus("Mailbox expired, polling stopped");
+        setStatus("Mailbox expired, polling stopped. You can reactivate to extend.");
         stopPolling();
-        token = "";
         return;
       }
       countdownEl.innerText = formatCountdown(left);
@@ -114,7 +154,6 @@ type TmpMailDetailResp = {
     pollTimer = window.setInterval(() => {
       void loadInbox();
     }, 8000);
-    stopBtn.disabled = false;
   }
 
   async function reqJson<T>(url: string, method: "GET" | "POST", body?: string): Promise<T> {
@@ -139,12 +178,45 @@ type TmpMailDetailResp = {
     });
   }
 
+  async function reactivateTmpMail() {
+    if (!token) {
+      return;
+    }
+    const startedAt = Date.now();
+    try {
+      reactivateBtn.disabled = true;
+      setStatus("Reactivating mailbox (calculating PoW)...");
+      const s = await genSign("reActivate" + token, MINZER0_CreateEmail);
+      const body = JSON.stringify({ time: s.time, sign: s.sign, token });
+      const data = await reqJson<TmpMailReactivateResp>("/tmpmail/reactivate", "POST", body);
+      if (data.code !== 0 || !data.expire) {
+        throw new Error(data.err || "reactivate failed");
+      }
+      expireAt = data.expire;
+      if (data.address) {
+        addressEl.innerText = data.address;
+      }
+      const costMs = Date.now() - startedAt;
+      setStatus(`Mailbox reactivated (cost: ${costMs}ms), polling inbox...`);
+      startCountdown();
+      if (!pollTimer) {
+        startPolling();
+      }
+      await loadInbox();
+    } catch (e) {
+      setStatus("Failed to reactivate mailbox");
+      alert((e as Error).message || "Failed to reactivate mailbox");
+    } finally {
+      updateReactivateButton();
+    }
+  }
+
   async function createTmpMail() {
     const startedAt = Date.now();
     try {
       createBtn.disabled = true;
       setStatus("Creating mailbox (calculating PoW)...");
-      detailCard.style.display = "none";
+      showDetailEmpty();
       setListEmpty("Loading...");
       const s = await genSign("newMail", MINZER0_CreateEmail);
       const body = JSON.stringify({ time: s.time, sign: s.sign });
@@ -161,6 +233,7 @@ type TmpMailDetailResp = {
       setStatus(`Mailbox created (createTmpMail cost: ${costMs}ms), polling inbox...`);
       startCountdown();
       startPolling();
+      updateReactivateButton();
       await loadInbox();
     } catch (e) {
       setStatus("Failed to create mailbox");
@@ -181,8 +254,9 @@ type TmpMailDetailResp = {
       return;
     }
     addressEl.innerText = "Recovered from URL hash (polling only)";
-    countdownEl.innerText = "--:--";
+    countdownEl.innerText = "00:00";
     setStatus("Hash token detected, polling restored automatically");
+    updateReactivateButton();
     startPolling();
     void loadInbox();
   }
@@ -215,16 +289,26 @@ type TmpMailDetailResp = {
         s.time
       )}&sign=${encodeURIComponent(s.sign)}`;
       const data = await reqJson<TmpMailListResp>(url, "GET");
-      if (data.code !== 0) {
-        throw new Error(data.err || "inbox load failed");
-      }
-      if (data.address) {
+
+      if (data.address && needsAddressFromInboxPoll()) {
         addressEl.innerText = data.address;
       }
-      if (!expireAt && data.expire) {
+      if (data.expire && data.expire !== expireAt) {
         expireAt = data.expire;
         startCountdown();
       }
+
+      if (data.code !== 0) {
+        const errMsg = data.err || "inbox load failed";
+        setStatus(errMsg);
+        if (data.messages && data.messages.length > 0) {
+          renderInbox(data.messages);
+        } else {
+          setListEmpty(errMsg);
+        }
+        return;
+      }
+
       renderInbox(data.messages || []);
     } catch (e) {
       setStatus("Inbox polling failed, retrying...");
@@ -246,7 +330,7 @@ type TmpMailDetailResp = {
       if (data.code !== 0 || !data.message) {
         throw new Error(data.err || "message load failed");
       }
-      detailCard.style.display = "block";
+      showDetailPanel();
       detailFrom.innerText = data.message.from || "";
       detailSubject.innerText = data.message.subject || "";
       detailTime.innerText = new Date(data.message.received_at * 1000).toLocaleString();

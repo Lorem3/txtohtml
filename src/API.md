@@ -118,7 +118,37 @@
 
 ---
 
-## 4. HTTP 投递邮件（调试/内部）
+## 4. 重新激活临时邮箱
+
+- 方法：`POST`
+- 路径：`/tmpmail/reactivate`
+- 请求体：
+
+```json
+{
+  "time": "1710000000",
+  "sign": "xxxx",
+  "token": "xxxxxxxxxxxxxxxxxxxxxxxx"
+}
+```
+
+- PoW 校验输入：`"reActivate" + token`
+- 校验等价计算：`sha256(sha256(time + "reActivate" + token + sign))`
+- 要求：前导 0 bit 数与「创建临时邮箱」相同（新建邮箱 PoW 难度，通常为 20）
+
+- 成功响应示例（与创建接口字段对齐）：
+
+```json
+{
+  "code": 0,
+  "address": "AbCdEf1234@txto.eu.org",
+  "expire": 1710000600
+}
+```
+
+---
+
+## 5. HTTP 投递邮件（调试/内部）
 
 - 方法：`POST`
 - 路径：`/tmpmail/deliver`
@@ -160,6 +190,7 @@
 不同接口的 `input`：
 
 - 新建邮箱：`"newMail"`
+- 重新激活：`"reActivate" + token`
 - 邮件列表：`"maillist" + token`
 - 邮件详情：`"mailmsg" + token + id`
 

@@ -112,12 +112,75 @@
 		.tm-small {
 			font-size: 12px;
 		}
+		.tm-split {
+			display: flex;
+			flex-direction: row;
+			align-items: stretch;
+			gap: 16px;
+			margin-top: 8px;
+		}
+		.tm-col-left {
+			flex: 0 0 40%;
+			min-width: 0;
+			display: flex;
+			flex-direction: column;
+		}
+		.tm-col-right {
+			flex: 1;
+			min-width: 0;
+			display: flex;
+			flex-direction: column;
+		}
+		.tm-col-left h3 {
+			margin-top: 0;
+			margin-bottom: 8px;
+		}
+		.tm-list-scroll {
+			flex: 1;
+			min-height: 240px;
+			max-height: min(55vh, 480px);
+			overflow-y: auto;
+			border-radius: 6px;
+		}
+		.tm-list-scroll .tm-mail-list {
+			border-radius: 6px;
+		}
+		.tm-detail-placeholder {
+			border: 1px dashed #ccc;
+			border-radius: 6px;
+			padding: 24px 16px;
+			color: #888;
+			text-align: center;
+			flex: 1;
+			min-height: 200px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			background: #fafafa;
+		}
 		.tm-card {
 			border: 1px solid #ddd;
 			border-radius: 6px;
 			padding: 12px;
-			margin-top: 12px;
+			margin-top: 0;
 			background: #fff;
+			flex: 1;
+			min-height: 200px;
+			display: flex;
+			flex-direction: column;
+			overflow: auto;
+		}
+		@media (max-width: 720px) {
+			.tm-split {
+				flex-direction: column;
+			}
+			.tm-col-left {
+				flex: none;
+				width: 100%;
+			}
+			.tm-list-scroll {
+				max-height: 40vh;
+			}
 		}
 		.tm-html-preview {
 			border: 1px solid #e5e5e5;
@@ -126,6 +189,25 @@
 			max-height: 320px;
 			overflow: auto;
 			background: #fafafa;
+		}
+		.tm-footnote {
+			margin-top: 28px;
+			padding-top: 18px;
+			border-top: 1px solid #e5e5e5;
+			color: #555;
+			font-size: 14px;
+			line-height: 1.55;
+		}
+		.tm-footnote h4 {
+			margin: 0 0 10px;
+			font-size: 15px;
+			color: #333;
+		}
+		.tm-footnote p {
+			margin: 0 0 10px;
+		}
+		.tm-footnote p:last-child {
+			margin-bottom: 0;
 		}
 	</style>
 </head>
@@ -148,7 +230,7 @@
 
 		<div class="tm-actions">
 			<button type="button" id="create-mail-btn">Create Temporary Mailbox</button>
-			<button type="button" id="stop-poll-btn" disabled>Stop Polling</button>
+			<button type="button" id="reactivate-mail-btn" disabled>Reactivate Mailbox</button>
 		</div>
 
 		<div class="tm-row">
@@ -156,22 +238,44 @@
 			<span id="mail-address">Not created</span>
 			<button type="button" id="copy-mail-btn" class="tm-copy-btn" disabled>Copy</button>
 		</div>
-		<div class="tm-row"><strong>Remaining Time:</strong><span id="mail-countdown" class="tm-countdown">--:--</span></div>
+		<div class="tm-row"><strong>Remaining Time:</strong><span id="mail-countdown" class="tm-countdown">00:00</span></div>
 		<div class="tm-row tm-muted" id="mail-status">Click "Create Temporary Mailbox" to start</div>
 
-		<h3>Inbox</h3>
-		<ul id="mail-list" class="tm-mail-list">
-			<li class="tm-muted">No messages yet</li>
-		</ul>
+		<div class="tm-split">
+			<div class="tm-col-left">
+				<h3>Inbox</h3>
+				<div class="tm-list-scroll">
+					<ul id="mail-list" class="tm-mail-list">
+						<li class="tm-muted">No messages yet</li>
+					</ul>
+				</div>
+			</div>
+			<div class="tm-col-right">
+				<div id="mail-detail-placeholder" class="tm-detail-placeholder">Select a message to view details</div>
+				<div id="mail-detail" class="tm-card" style="display: none;">
+					<div class="tm-row"><strong>From:</strong> <span id="detail-from"></span></div>
+					<div class="tm-row"><strong>Subject:</strong> <span id="detail-subject"></span></div>
+					<div class="tm-row tm-small tm-muted"><strong>Time:</strong> <span id="detail-time"></span></div>
+					<div class="tm-row"><strong>Text:</strong></div>
+					<pre id="detail-body" class="tm-html-preview"></pre>
+					<div class="tm-row"><strong>HTML:</strong></div>
+					<div id="detail-html" class="tm-html-preview"></div>
+				</div>
+			</div>
+		</div>
 
-		<div id="mail-detail" class="tm-card" style="display: none;">
-			<div class="tm-row"><strong>From:</strong> <span id="detail-from"></span></div>
-			<div class="tm-row"><strong>Subject:</strong> <span id="detail-subject"></span></div>
-			<div class="tm-row tm-small tm-muted"><strong>Time:</strong> <span id="detail-time"></span></div>
-			<div class="tm-row"><strong>Text:</strong></div>
-			<pre id="detail-body" class="tm-html-preview"></pre>
-			<div class="tm-row"><strong>HTML:</strong></div>
-			<div id="detail-html" class="tm-html-preview"></div>
+		<div class="tm-footnote" aria-label="About this mailbox">
+			<h4>What this mailbox is for</h4>
+			<p>
+				This is a disposable address for short-term use: sign-ups, verification codes, downloads, or any situation where you do not want to expose your real email. Messages are only kept for the active lifetime of the mailbox.
+			</p>
+			<h4>Reactivate and your browser link</h4>
+			<p>
+				When the countdown reaches zero, incoming mail stops until you <strong>reactivate</strong> the same mailbox. Reactivating runs a fresh proof-of-work step and extends the validity so you can keep using the same address and inbox.
+			</p>
+			<p>
+				After you create a mailbox, this page’s URL includes a token in the address bar. <strong>Bookmark or save that link</strong> so you can open it later and use <strong>Reactivate Mailbox</strong> to restore access without creating a new address.
+			</p>
 		</div>
 	</div>
 </body>
