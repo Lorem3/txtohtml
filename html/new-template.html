@@ -94,6 +94,55 @@
 	font-weight: 700;
   }
 
+  .tempmail-promo {
+	max-width: 100%;
+	margin: 0.75em 0 1em;
+	padding: 1em 1.1em;
+	background: linear-gradient(135deg, #e8f4fc 0%, #eef2ff 100%);
+	border: 1px solid #7eb8e8;
+	border-left: 6px solid #1188ff;
+	border-radius: 8px;
+	box-shadow: 0 4px 14px rgba(17, 136, 255, 0.15);
+	color: #223;
+	word-break: break-word;
+  }
+  .tempmail-promo-inner {
+	display: flex;
+	align-items: flex-start;
+	gap: 0.85em;
+  }
+  .tempmail-promo-icon {
+	width: 56px;
+	height: auto;
+	flex-shrink: 0;
+	border-radius: 8px;
+  }
+  .tempmail-promo h3 {
+	margin: 0 0 0.4em;
+	font-size: 1.25em;
+	font-weight: 700;
+	color: #0d5cab;
+  }
+  .tempmail-promo p {
+	margin: 0 0 0.85em;
+	line-height: 1.45;
+	font-size: 1rem;
+  }
+  .tempmail-promo-cta {
+	display: inline-block;
+	padding: 0.45em 1.1em;
+	background: #1188ff;
+	color: #fff !important;
+	text-decoration: none;
+	font-weight: 600;
+	border-radius: 6px;
+	box-shadow: 0 2px 8px rgba(17, 136, 255, 0.35);
+  }
+  .tempmail-promo-cta:hover {
+	background: #0d6fd4;
+	color: #fff !important;
+  }
+
   #statuslink{
 	color: #111122;
   }
@@ -123,6 +172,16 @@
 		</span>
 		<div style="text-align: right; float: none;" id="currentdomain"></div>
 	</h2>
+	<aside class="tempmail-promo">
+		<div class="tempmail-promo-inner">
+			<img class="tempmail-promo-icon" src="//cdn.jsdelivr.net/npm/txto@1.6.1/tmpmail.webp" width="56" alt="Temp mail" decoding="async" />
+			<div>
+				<h3>Need a disposable inbox?</h3>
+				<p>Use a temporary address for sign-ups and verification links so your real inbox stays private and spam-free.</p>
+				<a class="tempmail-promo-cta" href="/tmpmail">Create Temp Mail</a>
+			</div>
+		</div>
+	</aside>
 	<div id="beforecreate">
 	<p>Fast web pages for everybody.</p>
 	<!-- <p class="tipmsg">Posts inactive for 180 days will be deleted.</p> -->
