@@ -18,6 +18,18 @@ type TmpMailListResp = {
   address?: string;
   expire?: number;
   messages?: TmpMailItem[];
+  bound_email?: string;
+  err?: string;
+};
+
+type TmpMailBindResp = {
+  code: number;
+  verify_code?: string;
+  err?: string;
+};
+
+type TmpMailUnbindResp = {
+  code: number;
   err?: string;
 };
 
@@ -47,6 +59,8 @@ type TmpMailReactivateResp = {
   let expireAt = 0;
   let pollTimer = 0;
   let countdownTimer = 0;
+  let currentTempEmail = "";
+  let lastBoundEmail = "";
 
   const createBtn = document.getElementById("create-mail-btn") as HTMLButtonElement;
   const reactivateBtn = document.getElementById("reactivate-mail-btn") as HTMLButtonElement;
@@ -63,8 +77,25 @@ type TmpMailReactivateResp = {
   const detailHtml = document.getElementById("detail-html") as HTMLElement;
   const detailPlaceholder = document.getElementById("mail-detail-placeholder") as HTMLElement | null;
 
+  const bindPanel = document.getElementById("bind-panel") as HTMLElement;
+  const bindStatusEl = document.getElementById("bind-status") as HTMLElement;
+  const bindInputGroup = document.getElementById("bind-input-group") as HTMLElement;
+  const bindEmailInput = document.getElementById("bind-email-input") as HTMLInputElement;
+  const bindBtn = document.getElementById("bind-btn") as HTMLButtonElement;
+  const bindCodeArea = document.getElementById("bind-code-area") as HTMLElement;
+  const bindCodeValue = document.getElementById("bind-code-value") as HTMLElement;
+  const bindCodeCopyBtn = document.getElementById("bind-code-copy-btn") as HTMLButtonElement;
+  const bindCodeHint = document.getElementById("bind-code-hint") as HTMLElement;
+  const bindMailtoBtn = document.getElementById("bind-mailto-btn") as HTMLButtonElement;
+  const unbindGroup = document.getElementById("unbind-group") as HTMLElement;
+  const boundEmailDisplay = document.getElementById("bound-email-display") as HTMLElement;
+  const unbindBtn = document.getElementById("unbind-btn") as HTMLButtonElement;
+
   createBtn.onclick = createTmpMail;
   reactivateBtn.onclick = reactivateTmpMail;
+  bindBtn.onclick = bindEmail;
+  unbindBtn.onclick = unbindEmail;
+  bindCodeCopyBtn.onclick = copyBindCode;
   restoreFromHash();
   updateReactivateButton();
 
@@ -229,11 +260,14 @@ type TmpMailReactivateResp = {
       expireAt = data.expire;
       location.hash = encodeURIComponent(token);
       addressEl.innerText = data.address;
+      currentTempEmail = data.address;
+      lastBoundEmail = "";
       const costMs = Date.now() - startedAt;
       setStatus(`Mailbox created (createTmpMail cost: ${costMs}ms), polling inbox...`);
       startCountdown();
       startPolling();
       updateReactivateButton();
+      updateBindPanel(undefined);
       await loadInbox();
     } catch (e) {
       setStatus("Failed to create mailbox");
@@ -257,6 +291,7 @@ type TmpMailReactivateResp = {
     countdownEl.innerText = "00:00";
     setStatus("Hash token detected, polling restored automatically");
     updateReactivateButton();
+    updateBindPanel(undefined);
     startPolling();
     void loadInbox();
   }
@@ -293,9 +328,17 @@ type TmpMailReactivateResp = {
       if (data.address && needsAddressFromInboxPoll()) {
         addressEl.innerText = data.address;
       }
+      if (data.address && !currentTempEmail) {
+        currentTempEmail = data.address;
+      }
       if (data.expire && data.expire !== expireAt) {
         expireAt = data.expire;
         startCountdown();
+      }
+      const incomingBound = data.bound_email || "";
+      if (incomingBound !== lastBoundEmail) {
+        lastBoundEmail = incomingBound;
+        updateBindPanel(incomingBound || undefined);
       }
 
       if (data.code !== 0) {
@@ -340,6 +383,144 @@ type TmpMailReactivateResp = {
     } catch (e) {
       alert((e as Error).message || "Failed to load message details");
       setStatus("Message details load failed");
+    }
+  }
+
+  function updateBindPanel(boundEmail?: string) {
+    if (!token) {
+      bindPanel.style.display = "none";
+      return;
+    }
+    bindPanel.style.display = "block";
+
+    if (boundEmail) {
+      bindStatusEl.style.display = "none";
+      bindInputGroup.style.display = "none";
+      bindCodeArea.style.display = "none";
+      boundEmailDisplay.innerText = boundEmail;
+      unbindGroup.style.display = "flex";
+    } else {
+      bindStatusEl.style.display = "block";
+      bindInputGroup.style.display = "flex";
+      bindCodeArea.style.display = "none";
+      unbindGroup.style.display = "none";
+      if (!bindStatusEl.innerText) {
+        bindStatusEl.innerText = "Bind your real email to receive forwarded messages.";
+      }
+    }
+  }
+
+  async function bindEmail() {
+    if (!token || !currentTempEmail) {
+      return;
+    }
+    const privateEmail = bindEmailInput.value.trim();
+    if (!privateEmail) {
+      alert("Please enter your real email address.");
+      return;
+    }
+    try {
+      bindBtn.disabled = true;
+      bindStatusEl.innerText = "Sending bind request (calculating PoW)...";
+      const s = await genSign("Bind" + token + currentTempEmail + privateEmail, MINZER0);
+      const body = JSON.stringify({
+        token,
+        tempEmail: currentTempEmail,
+        privateEmail,
+        time: s.time,
+        sign: s.sign,
+      });
+      const data = await reqJson<TmpMailBindResp>("/tmpmail/bind-request", "POST", body);
+      if (data.code !== 0 || !data.verify_code) {
+        throw new Error(data.err || "bind request failed");
+      }
+      bindCodeValue.innerText = data.verify_code;
+      bindCodeHint.innerText =
+        `Send an email from ${privateEmail} to ${currentTempEmail} ` +
+        `with the code above in the subject or body. ` +
+        `The code is valid for about 10 minutes.`;
+      const mailtoUrl =
+        `mailto:${encodeURIComponent(currentTempEmail)}` +
+        `?subject=${encodeURIComponent(data.verify_code)}` +
+        `&body=${encodeURIComponent(data.verify_code)}`;
+      bindMailtoBtn.onclick = () => {
+        window.open(mailtoUrl, "_blank");
+      };
+      bindStatusEl.innerText = "Waiting for verification email...";
+      bindStatusEl.style.display = "block";
+      bindInputGroup.style.display = "none";
+      bindCodeArea.style.display = "block";
+      unbindGroup.style.display = "none";
+    } catch (e) {
+      bindStatusEl.innerText = "Bind request failed.";
+      alert((e as Error).message || "Bind request failed.");
+    } finally {
+      bindBtn.disabled = false;
+    }
+  }
+
+  async function unbindEmail() {
+    if (!token || !currentTempEmail) {
+      return;
+    }
+    const privateEmail = boundEmailDisplay.innerText.trim();
+    if (!privateEmail) {
+      return;
+    }
+    try {
+      unbindBtn.disabled = true;
+      bindStatusEl.innerText = "Unbinding (calculating PoW)...";
+      bindStatusEl.style.display = "block";
+      const s = await genSign("unbind" + token + currentTempEmail + privateEmail, MINZER0);
+      const body = JSON.stringify({
+        token,
+        tempEmail: currentTempEmail,
+        privateEmail,
+        time: s.time,
+        sign: s.sign,
+      });
+      const data = await reqJson<TmpMailUnbindResp>("/tmpmail/unbind", "POST", body);
+      if (data.code !== 0) {
+        throw new Error(data.err || "unbind failed");
+      }
+      lastBoundEmail = "";
+      bindEmailInput.value = "";
+      updateBindPanel(undefined);
+      bindStatusEl.innerText = "Email unbound successfully.";
+    } catch (e) {
+      bindStatusEl.innerText = "Unbind failed.";
+      alert((e as Error).message || "Unbind failed.");
+      updateBindPanel(lastBoundEmail || undefined);
+    } finally {
+      unbindBtn.disabled = false;
+    }
+  }
+
+  async function copyBindCode() {
+    const code = bindCodeValue.innerText.trim();
+    if (!code) {
+      return;
+    }
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(code);
+      } else {
+        const helper = document.createElement("textarea");
+        helper.value = code;
+        helper.setAttribute("readonly", "");
+        helper.style.position = "fixed";
+        helper.style.opacity = "0";
+        document.body.appendChild(helper);
+        helper.select();
+        document.execCommand("copy");
+        document.body.removeChild(helper);
+      }
+      bindCodeCopyBtn.innerText = "Copied!";
+      setTimeout(() => {
+        bindCodeCopyBtn.innerText = "Copy";
+      }, 1500);
+    } catch (_) {
+      alert("Copy failed. Please copy manually.");
     }
   }
 

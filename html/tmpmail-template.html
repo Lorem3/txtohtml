@@ -271,6 +271,91 @@
 		.tm-footnote p:last-child {
 			margin-bottom: 0;
 		}
+		.tm-bind-panel {
+			margin-top: 12px;
+			padding-top: 12px;
+			border-top: 1px solid #dce8f2;
+		}
+		.tm-bind-row {
+			display: flex;
+			flex-wrap: wrap;
+			align-items: center;
+			gap: 8px;
+		}
+		.tm-bind-row input[type="email"] {
+			flex: 1 1 180px;
+			min-width: 0;
+			padding: 5px 8px;
+			border: 1px solid #b0c8e0;
+			border-radius: 5px;
+			font-size: 0.95rem;
+			line-height: 1.4;
+			box-sizing: border-box;
+		}
+		.tm-bind-status {
+			font-size: 13px;
+			color: #555;
+			margin: 0 0 8px;
+			line-height: 1.45;
+		}
+		.tm-bind-code-area {
+			margin-top: 8px;
+			padding: 10px 12px;
+			background: #f0f7ff;
+			border: 1px solid #b8d6f0;
+			border-radius: 6px;
+		}
+		.tm-bind-code-label {
+			font-size: 13px;
+			color: #555;
+			margin: 0 0 6px;
+		}
+		.tm-bind-code {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			flex-wrap: wrap;
+			justify-content: space-between;
+		}
+		.tm-bind-code-value {
+			font-size: 1.3rem;
+			font-weight: 700;
+			letter-spacing: 0.12em;
+			color: #1a2b3d;
+			font-family: monospace;
+		}
+		.tm-bind-code-hint {
+			margin: 8px 0 0;
+			font-size: 12px;
+			color: #666;
+			line-height: 1.5;
+		}
+		.tm-bound-row {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			flex-wrap: wrap;
+		}
+		.tm-bound-email {
+			font-size: 0.95rem;
+			font-weight: 600;
+			color: #1a5c2a;
+			word-break: break-all;
+		}
+		.tm-bind-mailto-btn {
+			display: inline-block;
+			margin-top: 10px;
+			padding: 6px 14px;
+			background: #1a6db5;
+			color: #fff;
+			border-radius: 5px;
+			font-size: 0.9rem;
+			text-decoration: none;
+			font-weight: 600;
+		}
+		.tm-bind-mailto-btn:hover {
+			background: #155a98;
+		}
 		/* avoid class "logo": innercss uses content:url(txto.svg) and hides inner <img> */
 		.tm-header {
 			display: flex;
@@ -336,6 +421,26 @@
 			<div class="tm-meta-row">
 				<span id="mail-countdown" class="tm-countdown" aria-label="Remaining time">00:00</span>
 				<p class="tm-status tm-muted" id="mail-status">Click "Create Temporary Mailbox" to start</p>
+			</div>
+			<div id="bind-panel" class="tm-bind-panel" style="display:none;">
+				<p class="tm-bind-status" id="bind-status"></p>
+				<div id="bind-input-group" class="tm-bind-row">
+					<input type="email" id="bind-email-input" placeholder="your@email.com" autocomplete="email" />
+					<button type="button" id="bind-btn">Bind Email</button>
+				</div>
+				<div id="bind-code-area" class="tm-bind-code-area" style="display:none;">
+					<p class="tm-bind-code-label">Send the code below to the temporary mailbox from your real email:</p>
+					<div class="tm-bind-code">
+						<span id="bind-code-value" class="tm-bind-code-value"></span>
+						<button type="button" id="bind-code-copy-btn">Copy</button>
+					</div>
+					<p id="bind-code-hint" class="tm-bind-code-hint"></p>
+					<button type="button" id="bind-mailto-btn" class="tm-bind-mailto-btn">Open Email Client to Send</button>
+				</div>
+				<div id="unbind-group" class="tm-bound-row" style="display:none;">
+					<span class="tm-bind-status" style="margin:0;">Bound to: <span id="bound-email-display" class="tm-bound-email"></span></span>
+					<button type="button" id="unbind-btn">Unbind</button>
+				</div>
 			</div>
 		</section>
 
