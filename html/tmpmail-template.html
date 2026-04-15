@@ -322,7 +322,7 @@
 			<a class="tm-logo" href="/"><img class="tm-logo-img" src="//cdn.jsdelivr.net/npm/txto@1.6.1/tmpmail.webp" width="88" alt="Temp Mail" decoding="async" /></a>
 			<span class="tm-slogan">Temporary. Yet Accessible.</span>
 		</h2>
-		<p class="tm-lead">Disposable temporary mailbox. Default validity is 10 minutes and can be configured on the server.</p>
+		<p class="tm-lead">Disposable temporary mailbox. Default validity is __MAIL_TTL_MINUTES__ minutes and can be configured on the server.</p>
 
 		<section class="tm-mailbox-panel" aria-label="Mailbox">
 			<div class="tm-actions">
@@ -334,7 +334,7 @@
 				<button type="button" id="copy-mail-btn" class="tm-copy-btn" disabled>Copy</button>
 			</div>
 			<div class="tm-meta-row">
-				<span id="mail-countdown" class="tm-countdown" aria-label="Remaining time">00:00</span>
+				<span id="mail-countdown" class="tm-countdown" aria-label="Remaining time">00:00:00</span>
 				<p class="tm-status tm-muted" id="mail-status">Click "Create Temporary Mailbox" to start</p>
 			</div>
 		</section>

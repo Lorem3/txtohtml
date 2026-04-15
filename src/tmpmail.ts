@@ -121,7 +121,7 @@ type TmpMailReactivateResp = {
 
   function startCountdown() {
     if (!expireAt) {
-      countdownEl.innerText = "00:00";
+      countdownEl.innerText = "00:00:00";
       return;
     }
     if (countdownTimer) {
@@ -130,7 +130,7 @@ type TmpMailReactivateResp = {
     const tick = () => {
       const left = expireAt - Math.floor(Date.now() / 1000);
       if (left <= 0) {
-        countdownEl.innerText = "00:00";
+        countdownEl.innerText = "00:00:00";
         setStatus("Mailbox expired, polling stopped. You can reactivate to extend.");
         stopPolling();
         return;
@@ -142,9 +142,10 @@ type TmpMailReactivateResp = {
   }
 
   function formatCountdown(totalSec: number) {
-    const min = Math.floor(totalSec / 60);
+    const hour = Math.floor(totalSec / 3600);
+    const min = Math.floor((totalSec % 3600) / 60);
     const sec = totalSec % 60;
-    return `${String(min).padStart(2, "0")}:${String(sec).padStart(2, "0")}`;
+    return `${String(hour).padStart(2, "0")}:${String(min).padStart(2, "0")}:${String(sec).padStart(2, "0")}`;
   }
 
   function startPolling() {
@@ -254,7 +255,7 @@ type TmpMailReactivateResp = {
       return;
     }
     addressEl.innerText = "Recovered from URL hash (polling only)";
-    countdownEl.innerText = "00:00";
+    countdownEl.innerText = "00:00:00";
     setStatus("Hash token detected, polling restored automatically");
     updateReactivateButton();
     startPolling();

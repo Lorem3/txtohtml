@@ -9,6 +9,8 @@ const htmlconfig = {
   removeComments:true,
   minifyCSS:true
 }
+const mailTtlMinutes = Number.parseInt(fs.readFileSync('html/cfg-mail-ttl.html').toString(), 10);
+const mailTtlDisplay = Number.isFinite(mailTtlMinutes) ? String(mailTtlMinutes) : '10';
 const minifyConfig = {
   compress: {
     drop_console: true,
@@ -18,7 +20,7 @@ const minifyConfig = {
       "MINZER0":parseInt(fs.readFileSync('html/cfg-pow.html').toString()),
       "MINZER0_Add":parseInt(fs.readFileSync('html/cfg-pow-add.html').toString()),
       "MINZER0_CreateEmail":parseInt(fs.readFileSync('html/cfg-pow-createmail.html').toString()),
-      "MINZER0_MailTTL":parseInt(fs.readFileSync('html/cfg-mail-ttl.html').toString())
+      "MINZER0_MailTTL":mailTtlMinutes
       
   }
     
@@ -52,6 +54,7 @@ const minifyConfig = {
       var jsname = filename.substring(0, filename.length - suffix.length);
       console.log(jsname);
       var tmp = fs.readFileSync("./html/" + filename).toString();
+      tmp = tmp.replace(/__MAIL_TTL_MINUTES__/g, mailTtlDisplay);
 
       tmp = tmp.replace("</head>",`${innerCss}\n</head>`)
 
