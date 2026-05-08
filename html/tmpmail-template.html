@@ -302,6 +302,11 @@
 			text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
 			max-width: 100%;
 		}
+
+		#tm-stats{
+			font-size: 15px;
+			color: #101020
+		}
 	</style>
 </head>
 
@@ -322,7 +327,7 @@
 			<a class="tm-logo" href="/"><img class="tm-logo-img" src="//cdn.jsdelivr.net/npm/txto@1.6.1/tmpmail.webp" width="88" alt="Temp Mail" decoding="async" /></a>
 			<span class="tm-slogan">Temporary. Yet Accessible.</span>
 		</h2>
-		<p class="tm-lead">Disposable temporary mailbox. Default validity is __MAIL_TTL_MINUTES__ minutes and can be configured on the server.<span id="tm-stats"></span></p>
+		<p class="tm-lead">Disposable temporary mailbox. Default validity is __MAIL_TTL_MINUTES__ minutes and can be configured on the server.</p>
 
 		<section class="tm-mailbox-panel" aria-label="Mailbox">
 			<div class="tm-actions">
@@ -373,6 +378,10 @@
 			</p>
 			<p>
 				After you create a mailbox, this page’s URL includes a token in the address bar. <strong>Bookmark or save that link</strong> so you can open it later and use <strong>Reactivate Mailbox</strong> to restore access without creating a new address.
+				
+			</p>
+			<p>
+				<span id="tm-stats"></span>
 			</p>
 		</div>
 
