@@ -73,7 +73,25 @@ const minifyConfig = {
       
 
       if(process.argv[2] == 'DEBUG'){
-
+        const debugConfig = {
+          compress: {
+            drop_console: false,
+            pure_funcs: [],
+            global_defs: minifyConfig.compress.global_defs,
+            sequences: false,
+            reduce_vars: false,
+            collapse_vars: false,
+            dead_code: false,
+            evaluate: false,
+            passes: 1,
+          },
+          mangle: false,
+          format: {
+            beautify: true,
+            indent_level: 2,
+          },
+        };
+        js = (await minify(js, debugConfig)).code;
       }else{
         js = (await minify(js, minifyConfig)).code;
       }

@@ -17,6 +17,8 @@ type TmpMailListResp = {
   code: number;
   address?: string;
   expire?: number;
+  c0?: number;
+  c1?: number;
   messages?: TmpMailItem[];
   err?: string;
 };
@@ -42,6 +44,12 @@ type TmpMailReactivateResp = {
   err?: string;
 };
 
+type TmpMailStatsResp = {
+  code: number;
+  c0?: number;
+  c1?: number;
+};
+
 (function tmpMailPage() {
   let token = "";
   let expireAt = 0;
@@ -62,10 +70,12 @@ type TmpMailReactivateResp = {
   const detailBody = document.getElementById("detail-body") as HTMLElement;
   const detailHtml = document.getElementById("detail-html") as HTMLElement;
   const detailPlaceholder = document.getElementById("mail-detail-placeholder") as HTMLElement | null;
+  const statsEl = document.getElementById("tm-stats") as HTMLElement | null;
 
   createBtn.onclick = createTmpMail;
   reactivateBtn.onclick = reactivateTmpMail;
   restoreFromHash();
+  void loadStats();
   updateReactivateButton();
 
   function setStatus(txt: string) {
@@ -179,6 +189,34 @@ type TmpMailReactivateResp = {
     });
   }
 
+  async function loadStats() {
+    if (!statsEl) {
+      return;
+    }
+    try {
+      const data = await reqJson<TmpMailStatsResp>("/tmpmail/stats", "GET");
+      if (typeof data.code === "number" && data.code !== 0) {
+        return;
+      }
+      if (typeof data.c0 !== "number" || typeof data.c1 !== "number") {
+        return;
+      }
+      renderStats(data.c0, data.c1);
+    } catch (_e) {
+      // ignore stats errors; this should not affect mailbox features
+    }
+  }
+
+  function renderStats(c0?: number, c1?: number) {
+    if (!statsEl) {
+      return;
+    }
+    if (typeof c0 !== "number" || typeof c1 !== "number") {
+      return;
+    }
+    statsEl.innerText = ` · ${c0}/${c1}`;
+  }
+
   async function reactivateTmpMail() {
     if (!token) {
       return;
@@ -290,6 +328,7 @@ type TmpMailReactivateResp = {
         s.time
       )}&sign=${encodeURIComponent(s.sign)}`;
       const data = await reqJson<TmpMailListResp>(url, "GET");
+      renderStats(data.c0, data.c1);
 
       if (data.address && needsAddressFromInboxPoll()) {
         addressEl.innerText = data.address;
