@@ -55,6 +55,10 @@ type TmpMailStatsResp = {
   let expireAt = 0;
   let pollTimer = 0;
   let countdownTimer = 0;
+  /** 通过带 `#token` 的书签/分享链接进入（用于区分是否在首次 inbox 时尝试自动 reactivate） */
+  let enteredFromSavedHash = false;
+  /** 已为「从 hash 进入且需续期」自动执行过一次 reactivate，避免轮询重复触发 */
+  let autoReactivateFromHashDone = false;
 
   const createBtn = document.getElementById("create-mail-btn") as HTMLButtonElement;
   const reactivateBtn = document.getElementById("reactivate-mail-btn") as HTMLButtonElement;
@@ -292,12 +296,45 @@ type TmpMailStatsResp = {
     if (!token) {
       return;
     }
+    enteredFromSavedHash = true;
     addressEl.innerText = "Recovered from URL hash (polling only)";
     countdownEl.innerText = "00:00:00";
     setStatus("Hash token detected, polling restored automatically");
     updateReactivateButton();
     startPolling();
     void loadInbox();
+  }
+
+  /**
+   * 从保存的链接进入时：若收件箱已过期或接口明确表示未激活，则自动 reactivate 一次。
+   * @returns 若已触发 reactivate 则为 true，调用方应跳过后续对本次 `data` 的处理。
+   */
+  async function maybeAutoReactivateFromSavedHashLink(data: TmpMailListResp): Promise<boolean> {
+    if (!enteredFromSavedHash || autoReactivateFromHashDone || !token) {
+      return false;
+    }
+    const nowSec = Math.floor(Date.now() / 1000);
+    const ex =
+      typeof data.expire === "number" && data.expire > 0
+        ? data.expire
+        : expireAt > 0
+          ? expireAt
+          : 0;
+    const expiredByTime = ex > 0 && ex <= nowSec;
+    const err = (data.err || "").toLowerCase();
+    const errSuggestsNeedReactivate =
+      data.code !== 0 &&
+      /mailbox expired|mailbox inactive|expir|inactive|deactiv|not active|过期|未激活|失效/.test(err);
+    if (!expiredByTime && !errSuggestsNeedReactivate) {
+      return false;
+    }
+    if (data.code === 0 && !expiredByTime) {
+      return false;
+    }
+    autoReactivateFromHashDone = true;
+    setStatus("Mailbox inactive or expired, reactivating automatically...");
+    await reactivateTmpMail();
+    return true;
   }
 
   function renderInbox(items: TmpMailItem[]) {
@@ -336,6 +373,10 @@ type TmpMailStatsResp = {
       if (data.expire && data.expire !== expireAt) {
         expireAt = data.expire;
         startCountdown();
+      }
+
+      if (await maybeAutoReactivateFromSavedHashLink(data)) {
+        return;
       }
 
       if (data.code !== 0) {
