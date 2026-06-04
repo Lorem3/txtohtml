@@ -193,6 +193,46 @@ type TmpMailStatsResp = {
     });
   }
 
+  const STATS_PREV_STORAGE_KEY = "tm-mail-stats-prev";
+
+  function hasStatsPair(data: { c0?: unknown; c1?: unknown }): data is { c0: number; c1: number } {
+    return typeof data.c0 === "number" && typeof data.c1 === "number";
+  }
+
+  /** 仅当本地曾成功保存过上一次 c0/c1 时返回；无缓存或格式无效视为「没有上一次」 */
+  function readStatsPrev(): { c0: number; c1: number } | null {
+    try {
+      const raw = localStorage.getItem(STATS_PREV_STORAGE_KEY);
+      if (!raw) {
+        return null;
+      }
+      const parsed = JSON.parse(raw) as { c0?: unknown; c1?: unknown; hasPrev?: unknown };
+      if (parsed.hasPrev !== true) {
+        return null;
+      }
+      if (!hasStatsPair(parsed)) {
+        return null;
+      }
+      if (!Number.isFinite(parsed.c0) || !Number.isFinite(parsed.c1)) {
+        return null;
+      }
+      return { c0: parsed.c0, c1: parsed.c1 };
+    } catch (_e) {
+      return null;
+    }
+  }
+
+  function writeStatsPrev(c0: number, c1: number) {
+    try {
+      localStorage.setItem(
+        STATS_PREV_STORAGE_KEY,
+        JSON.stringify({ c0, c1, hasPrev: true })
+      );
+    } catch (_e) {
+      // ignore quota / private browsing
+    }
+  }
+
   async function loadStats() {
     if (!statsEl) {
       return;
@@ -202,7 +242,7 @@ type TmpMailStatsResp = {
       if (typeof data.code === "number" && data.code !== 0) {
         return;
       }
-      if (typeof data.c0 !== "number" || typeof data.c1 !== "number") {
+      if (!hasStatsPair(data)) {
         return;
       }
       renderStats(data.c0, data.c1);
@@ -218,7 +258,18 @@ type TmpMailStatsResp = {
     if (typeof c0 !== "number" || typeof c1 !== "number") {
       return;
     }
-    statsEl.innerText = ` · ${c0}/${c1}`;
+    const prev = readStatsPrev();
+    let text = ` · ${c0}/${c1}`;
+    // 无本地「上一次」记录时不计算增量，避免把缺失基线当成 0 再与当前值相减
+    if (prev !== null) {
+      const d0 = c0 > prev.c0 ? c0 - prev.c0 : 0;
+      const d1 = c1 > prev.c1 ? c1 - prev.c1 : 0;
+      if (d0 > 0 || d1 > 0) {
+        text += ` +${d0} +${d1}`;
+      }
+    }
+    statsEl.innerText = text;
+    writeStatsPrev(c0, c1);
   }
 
   async function reactivateTmpMail() {
@@ -365,7 +416,9 @@ type TmpMailStatsResp = {
         s.time
       )}&sign=${encodeURIComponent(s.sign)}`;
       const data = await reqJson<TmpMailListResp>(url, "GET");
-      renderStats(data.c0, data.c1);
+      if (hasStatsPair(data)) {
+        renderStats(data.c0, data.c1);
+      }
 
       if (data.address && needsAddressFromInboxPoll()) {
         addressEl.innerText = data.address;
