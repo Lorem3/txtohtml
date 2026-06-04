@@ -162,31 +162,34 @@
 		}
 		.tm-split {
 			display: flex;
-			flex-direction: row;
+			flex-direction: column;
 			align-items: stretch;
 			gap: 16px;
 			margin-top: 4px;
 		}
 		.tm-col-left {
-			flex: 0 0 40%;
+			flex: none;
+			width: 100%;
 			min-width: 0;
 			display: flex;
 			flex-direction: column;
 		}
 		.tm-col-right {
-			flex: 1;
+			flex: none;
+			width: 100%;
 			min-width: 0;
 			display: flex;
 			flex-direction: column;
 		}
-		.tm-col-left h3 {
+		.tm-col-left h3,
+		.tm-col-right h3 {
 			margin-top: 0;
 			margin-bottom: 8px;
 		}
 		.tm-list-scroll {
-			flex: 1;
-			min-height: 240px;
-			max-height: min(55vh, 480px);
+			flex: none;
+			min-height: 120px;
+			max-height: min(32vh, 280px);
 			overflow-y: auto;
 			border-radius: 6px;
 		}
@@ -217,18 +220,6 @@
 			display: flex;
 			flex-direction: column;
 			overflow: auto;
-		}
-		@media (max-width: 720px) {
-			.tm-split {
-				flex-direction: column;
-			}
-			.tm-col-left {
-				flex: none;
-				width: 100%;
-			}
-			.tm-list-scroll {
-				max-height: 40vh;
-			}
 		}
 		@media (max-width: 520px) {
 			.tm-meta-row {
@@ -354,6 +345,7 @@
 				</div>
 			</div>
 			<div class="tm-col-right">
+				<h3>Preview</h3>
 				<div id="mail-detail-placeholder" class="tm-detail-placeholder">Select a message to view details</div>
 				<div id="mail-detail" class="tm-card" style="display: none;">
 					<div class="tm-row"><strong>From:</strong> <span id="detail-from"></span></div>
