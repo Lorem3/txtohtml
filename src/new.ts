@@ -62,6 +62,27 @@
     return cookieValue;
   }
 
+  const LOGIN_PROMPT_KEY = "login_prompt_dismissed_until";
+  const TEN_DAYS_MS = 10 * 24 * 60 * 60 * 1000;
+
+  function maybePromptLogin(): boolean {
+    var accname = decodeURIComponent(getCookie("accname") || "");
+    if (accname) return true;
+
+    var dismissedUntil = localStorage.getItem(LOGIN_PROMPT_KEY);
+    if (dismissedUntil && Date.now() < Number(dismissedUntil)) return true;
+
+    if (Math.random() >= 0.5) return true;
+
+    if (confirm("Would you like to log in? After logging in, you can view and manage your posts.")) {
+      window.open("/login", "_blank");
+      return false;
+    } else {
+      localStorage.setItem(LOGIN_PROMPT_KEY, String(Date.now() + TEN_DAYS_MS));
+      return true;
+    }
+  }
+
   (function () {
     var t = decodeURIComponent(getCookie("accname"));
     if (t) {
@@ -119,6 +140,9 @@
     var content = getValue("content-input");
     if (!content) {
       showMsg("please input content");
+      return;
+    }
+    if (!maybePromptLogin()) {
       return;
     }
     showLoading(true);
