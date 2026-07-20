@@ -1,10 +1,7 @@
 {
   "name": "txtohtml",
   "version": "1.0.0",
-  "description": "text to html compiler",
-  "publishConfig": {
-    "access": "public"
-  },
+  "description": "安装  terser typescript  ``` npm i terser -g",
   "main": "genhtml.js",
   "scripts": {
     "build": "node_modules/typescript/bin/tsc && node genhtml.js && ./pack dis/html",
