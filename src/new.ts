@@ -283,4 +283,17 @@
       location.href = "/";
     }
   }
+
+  // Random promo card: show one of shadowmail or iPasteLite
+  (function showRandomPromo() {
+    var promoArea = document.getElementById("promo-area");
+    if (!promoArea) return;
+    var cards = promoArea.querySelectorAll("aside");
+    if (cards.length < 2) return;
+    var idx = Math.random() < 0.5 ? 0 : 1;
+    for (var i = 0; i < cards.length; i++) {
+      cards[i].style.display = i === idx ? "" : "none";
+    }
+  })();
+
 })();

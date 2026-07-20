@@ -143,6 +143,55 @@
 	color: #fff !important;
   }
 
+  .ipaste-promo {
+	max-width: 100%;
+	margin: 0.75em 0 1em;
+	padding: 1em 1.1em;
+	background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+	border: 1px solid #6ee7b7;
+	border-left: 6px solid #10b981;
+	border-radius: 8px;
+	box-shadow: 0 4px 14px rgba(16, 185, 129, 0.15);
+	color: #223;
+	word-break: break-word;
+  }
+  .ipaste-promo-inner {
+	display: flex;
+	align-items: flex-start;
+	gap: 0.85em;
+  }
+  .ipaste-promo-icon {
+	width: 56px;
+	height: auto;
+	flex-shrink: 0;
+	border-radius: 8px;
+  }
+  .ipaste-promo h3 {
+	margin: 0 0 0.4em;
+	font-size: 1.25em;
+	font-weight: 700;
+	color: #065f46;
+  }
+  .ipaste-promo p {
+	margin: 0 0 0.85em;
+	line-height: 1.45;
+	font-size: 1rem;
+  }
+  .ipaste-promo-cta {
+	display: inline-block;
+	padding: 0.45em 1.1em;
+	background: #10b981;
+	color: #fff !important;
+	text-decoration: none;
+	font-weight: 600;
+	border-radius: 6px;
+	box-shadow: 0 2px 8px rgba(16, 185, 129, 0.35);
+  }
+  .ipaste-promo-cta:hover {
+	background: #059669;
+	color: #fff !important;
+  }
+
   #statuslink{
 	color: #111122;
   }
@@ -172,15 +221,27 @@
 		</span>
 		<div style="text-align: right; float: none;" id="currentdomain"></div>
 	</h2>
-	<aside class="tempmail-promo">
-		<div class="tempmail-promo-inner">
-			<img class="tempmail-promo-icon" src="//cdn.jsdelivr.net/npm/txto@1.6.1/tmpmail.webp" width="56" alt="Temp mail" decoding="async" />
-			<div>
-				<h3>Quiet Inbox. Private Life.</h3>
-				<p>Use a temporary address for sign-ups and verification links so your real inbox stays private and spam-free.</p>
-				<a class="tempmail-promo-cta" href="https://shadowmail.netlify.app/">Create Temp Mail</a>
+	<aside id="promo-area">
+		<aside class="tempmail-promo">
+			<div class="tempmail-promo-inner">
+				<img class="tempmail-promo-icon" src="//cdn.jsdelivr.net/npm/txto@1.6.1/tmpmail.webp" width="56" alt="Temp mail" decoding="async" />
+				<div>
+					<h3>Quiet Inbox. Private Life.</h3>
+					<p>Use a temporary address for sign-ups and verification links so your real inbox stays private and spam-free.</p>
+					<a class="tempmail-promo-cta" href="https://shadowmail.netlify.app/">Create Temp Mail</a>
+				</div>
 			</div>
-		</div>
+		</aside>
+		<aside class="ipaste-promo" style="display:none;">
+			<div class="ipaste-promo-inner">
+				<img class="ipaste-promo-icon" src="//cdn.jsdelivr.net/npm/txto@1.6.2/chameleon128.webp" width="56" alt="iPasteLite" decoding="async" />
+				<div>
+					<h3>iPasteLite — Mac Clipboard Manager</h3>
+					<p>Offline-first, end-to-end encrypted, feather-light, and blazingly fast. Your clipboard history stays on your Mac — no cloud, no tracking, no bloat.</p>
+					<a class="ipaste-promo-cta" href="https://github.com/iPasteLite/iPasteLite-Release/releases">Free Download</a>
+				</div>
+			</div>
+		</aside>
 	</aside>
 	<div id="beforecreate">
 	<p>Fast web pages for everybody.</p>
